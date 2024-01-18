@@ -74,7 +74,7 @@ def createGTF(output_dict, outputPath):
     
     with open(f"{outputPath}/quantification.gtf", 'w') as gtf_file:
 
-        for i in range(1,len(output_dict) + 1):
+        for i in range(1,len(output_dict.keys()) + 1):
             i = str(i)
             chromosome = output_dict[i]["ORF_ID"].split('_')[1]
             strand = '+'
