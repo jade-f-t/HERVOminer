@@ -3,9 +3,11 @@ import os
 
 def func2_summarize_annotation(blastpOutput, outputPath):
 
-    output_dict = getHERVregion(blastpOutput, outputPath)
+    getHERVregion(blastpOutput, outputPath)
 
-    createGTF(output_dict, outputPath)
+    HERVregion = f"{outputPath}/output_dict.json"
+
+    createGTF(HERVregion, outputPath)
 
 def getHERVregion(blastpOutput, outputPath):
 
@@ -68,13 +70,14 @@ def getHERVregion(blastpOutput, outputPath):
     with open(f"{outputPath}/output_dict.json", 'w') as file:
         json.dump(output_dict, file, indent=4)
 
-    return output_dict
-
-def createGTF(output_dict, outputPath):
+def createGTF(HERVregion, outputPath):
+    
+    with open(HERVregion, 'r') as file:
+        output_dict = json.load(file)
     
     with open(f"{outputPath}/quantification.gtf", 'w') as gtf_file:
 
-        for i in range(1,len(output_dict.keys()) + 1):
+        for i in range(1,len(output_dict) + 1):
             i = str(i)
             chromosome = output_dict[i]["ORF_ID"].split('_')[1]
             strand = '+'
