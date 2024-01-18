@@ -85,7 +85,7 @@ The absolute directory of the query peptides FASTA file.
 - Example input format : \
 /Users/jade-f-t/data/input_peptide.fasta
 
-### Subcommands
+### Separated Subcommands
 
 1. Protein BLAST Similarity Analysis (BLAST)
 - Description : \
@@ -140,6 +140,19 @@ Generate three tables and three groups of graphs from the quantification results
 ```
 - Output : 3 Tables , 3 Figures
 
-
+### Single Command Workflow
+- Description : \
+This command can finish all of the above steps all at once. The outputs are same as the above.
+- Usage :
+```bash
+./scripts/HERVOminer.py HERVOminer \
+-p <path to the input peptide file> \ 
+-i <path to the input csv file with all of the bam file path> \ 
+-t <no of threads to use for one sample> \
+-n <number of sample to be analyzed in parallel computing> \
+-z <include region with zero count or not, 1 : with zero, 0: without zero> \ 
+-o <path to the output file>
+-d <set the dpi of the figures>
+```
 
 
