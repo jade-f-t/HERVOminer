@@ -1,5 +1,6 @@
 import streamlit as st
 import io
+import os
 import tempfile
 from func1_blastORF import func1_blastORF
 
