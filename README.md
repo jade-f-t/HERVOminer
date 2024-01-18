@@ -159,5 +159,8 @@ This command can finish all of the above steps all at once. The outputs are same
 ```
 
 ### Example final outputs
+![Distribution of Total Counts in Tumor and Normal Samples for Each Peptide](assets/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_for_Each_Peptide.png)
+![Distribution of Total Counts in Tumor and Normal Samples Across HERV Regions of Each Query Peptide](assets/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_Across_HERV_Regions_of_Peptide_1.png)
+![Distribution of Total Counts Across HERV Regions in Each Sample for Peptide](assets/Distribution_of_Total_Counts_Across_HERV_Regions_in_Each_Sample_for_Peptide_1.png)
 
 
