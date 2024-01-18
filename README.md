@@ -38,6 +38,7 @@ Please use the following commands to install the dependencies:
 ```bash
 conda install bioconda::subread=2.0.6
 conda install bioconda::bedtools=2.31.0
+conda install bioconda::blast= 2.15.0
 pip install -r requirements.txt
 ```
 
@@ -53,7 +54,7 @@ cd ..
 
 4. Grant execution permission to the HERVOminer.py script
 ```bash
-chmod +x ./scripts/HERVOminer.py
+chmod +x ./src/HERVOminer.py
 ```
 
 ## Implementation
@@ -92,7 +93,7 @@ The absolute directory of the query peptides FASTA file.
 Find regions of similarity between query peptides and the open reading frames of HERV regions. 
 - Usage :
 ```bash
-./scripts/HERVOminer.py blastORF \
+./src/HERVOminer.py blastORF \
 -p <path to the input peptide file> \
 -o <path to the output file>
 ```
@@ -103,7 +104,7 @@ Find regions of similarity between query peptides and the open reading frames of
 Filter BLAST results of protein BLAST , and summarize their information.Then, generate the corresponding annotation file for the following quantification process.
 - Usage :
 ```bash
-./scripts/HERVOminer.py summarizeAnnotate \
+./src/HERVOminer.py summarizeAnnotate \
 -i <path to the input blastp output file get from Step 1> \
 -o <path to the output file>
 ```
@@ -114,7 +115,7 @@ Filter BLAST results of protein BLAST , and summarize their information.Then, ge
 Use FeatureCountsto quantify each BLAST result remaining after filtering.
 - Usage :
 ```bash
-./scripts/HERVOminer.py quantification \
+./src/HERVOminer.py quantification \
 -i <path to the input csv file with all of the bam file path> \
 -a <path to the annotation file created by Step 2> \
 -o <path to the output file> \
@@ -129,7 +130,7 @@ output directories (resultDirectories_T.csv and resultDirectories_N.csv)
 Generate three tables and three groups of graphs from the quantification results.
 - Usage :
 ```bash
-./scripts/HERVOminer.py outputResult \
+./src/HERVOminer.py outputResult \
 -p <path to the input peptide file> \ 
 -i <path to the input csv file with all of the bam file path> \ 
 -T <path to the resultDirectories_T.csv file> \ 
@@ -145,7 +146,7 @@ Generate three tables and three groups of graphs from the quantification results
 This command can finish all of the above steps all at once. The outputs are same as the above.
 - Usage :
 ```bash
-./scripts/HERVOminer.py HERVOminer \
+./src/HERVOminer.py HERVOminer \
 -p <path to the input peptide file> \ 
 -i <path to the input csv file with all of the bam file path> \ 
 -t <no of threads to use for one sample> \

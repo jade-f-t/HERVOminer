@@ -11,7 +11,7 @@ def func1_blastORF(inputPeptide, outputPath):
 def blastp(inputPeptide, outputPath):
 	blastpCommand = \
 		f"blastp -query {inputPeptide} \
-		-db ../data/HervOrfBlastpDB/HervOrfBlastpDB \
+		-db ./data/HervOrfBlastpDB/HervOrfBlastpDB \
 		-word_size 3 -gapopen 9 -gapextend 1 -matrix PAM30 -threshold 16 \
 		-comp_based_stats 0 -window_size 15 -num_threads 48 -evalue 0.05 \
 		-outfmt '6 qacc sacc pident qseq length mismatch gapopen qlen qstart qend slen sstart send evalue bitscore'\

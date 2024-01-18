@@ -13,7 +13,7 @@ def getHERVregion(blastpOutput, outputPath):
 
     output_dict = {}
 
-    with open('../data/HERV_ORF_dict', 'r') as file:
+    with open('./data/HERV_ORF_dict', 'r') as file:
         HERV_ORF_dict = json.load(file)
 
     with open(blastpOutput, 'r')as file:
