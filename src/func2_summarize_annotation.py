@@ -3,9 +3,7 @@ import os
 
 def func2_summarize_annotation(blastpOutput, outputPath):
 
-    getHERVregion(blastpOutput, outputPath)
-
-    HERVregion = f"{outputPath}/output_dict.json"
+    output_dict = getHERVregion(blastpOutput, outputPath)
 
     createGTF(output_dict, outputPath)
 
@@ -69,6 +67,8 @@ def getHERVregion(blastpOutput, outputPath):
 
     with open(f"{outputPath}/output_dict.json", 'w') as file:
         json.dump(output_dict, file, indent=4)
+
+    return output_dict
 
 def createGTF(output_dict, outputPath):
     
