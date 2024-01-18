@@ -3,7 +3,7 @@ import streamlit as st
 def check_password():
     """Simple password check."""
     password = st.sidebar.text_input("Enter a password:", type="password")
-    if password == "your_password":
+    if password == "SnowMan0122":
         return True
     else:
         return False
@@ -17,4 +17,5 @@ if check_password():
     }))
 else:
     st.sidebar.error("The password you entered is incorrect.")
+
 
