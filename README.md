@@ -49,6 +49,7 @@ Please decompress the included compressed data files before use, as they contain
 cd data 
 tar -xzvf HERV_ORF_dict.tar.gz
 tar -xzvf HervOrfBlastpDB.tar.gz
+cat hg19_part_* > hg19.tar.gz
 tar -xzvf hg19.tar.gz
 cd ..
 ```
@@ -156,5 +157,7 @@ This command can finish all of the above steps all at once. The outputs are same
 -o <path to the output file>
 -d <set the dpi of the figures>
 ```
+
+### Example final outputs
 
 
