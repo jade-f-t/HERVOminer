@@ -545,7 +545,7 @@ def get_padding(total_result, outputPath):
 					)
 				bed_file.write(bed_line + "\n")
 
-			bedCommand = f"bedtools getfasta -name -fi ../data/hg19/{total_result[peptide][region]['data']['chr']}.fa -bed {outputPath}/{peptide}_{region}.bed -fo {outputPath}/extracted_{peptide}_{region}_seq.fasta"
+			bedCommand = f"bedtools getfasta -name -fi ./data/hg19/{total_result[peptide][region]['data']['chr']}.fa -bed {outputPath}/{peptide}_{region}.bed -fo {outputPath}/extracted_{peptide}_{region}_seq.fasta"
 			try:
 				subprocess.run(bedCommand, shell = True, check = True)
 			except subprocess.CalledProcessError as err:
