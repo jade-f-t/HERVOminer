@@ -32,7 +32,7 @@ git clone https://github.com/jade-f-t/HERVOminer.git
 cd HERVOminer
 ```
 
-2. Installing Dependencies
+2. Installing Dependencies \
 Please use the following commands to install the dependencies:
 
 ```bash
@@ -41,7 +41,7 @@ conda install bioconda::bedtools=2.31.0
 pip install -r requirements.txt
 ```
 
-3. Decompress Data
+3. Decompress Data \
 Please decompress the included compressed data files before use, as they contain essential data required for the operation of HERVOminer.
 
 ```bash
@@ -62,30 +62,31 @@ HERVOminer is designed to determine whether the query peptides are derived from 
 
 ### Input files format
 1. RNA-seq CSV
-- Description : 
+- Description : \
 A CSV file summarizing directories of post-processed alignment files for the samples.
 Each tumor sample need to have its corresponding normal sample. The sample id fields of the tumor and corresponding normal sample have to be same and the sample type field should state whether the sample is tumor (T) or normal (N) sample. The directory has to be absolute directory.
-- Format : 
+- Format : \
 3 fields : sample id, sample type (T / N), directory
 - Example input format : 
-
-| 10   | T   | /Users/jade-f-t/data/10T.bam   |
-| 10   | N   | /Users/jade-f-t/data/10N.bam   |
+| <!-- -->    | <!-- -->    | <!-- -->    |
+|-------------|-------------|-------------|
+| 10   | T   | /Users/jade-f-t/data/10T.bam   | 
+| 10   | N   | /Users/jade-f-t/data/10N.bam   | 
 | 21   | T   | /Users/jade-f-t/data/21T.bam   |
 | 21   | N   | /Users/jade-f-t/data/21N.bam   |
 | ...     | ...     | ...     |
 
 
 2. query peptide 
-- Description : 
+- Description : \
 The absolute directory of the query peptides FASTA file.
-- Example input format : 
+- Example input format : \
 /Users/jade-f-t/data/input_peptide.fasta
 
 ### Subcommands
 
 1. Protein BLAST Similarity Analysis (BLAST)
-- Description : 
+- Description : \
 Find regions of similarity between query peptides and the open reading frames of HERV regions. 
 - Usage :
 ```bash
@@ -96,7 +97,7 @@ Find regions of similarity between query peptides and the open reading frames of
 - Output : blastp_output.txt
 
 2. BLAST results summarisation, Annotation file generation
-- Description : 
+- Description : \
 Filter BLAST results of protein BLAST , and summarize their information.Then, generate the corresponding annotation file for the following quantification process.
 - Usage :
 ```bash
@@ -107,7 +108,7 @@ Filter BLAST results of protein BLAST , and summarize their information.Then, ge
 - Output : output_dict.json, quantification.gtf
 
 3. Quantification (featureCounts)
-- Description : 
+- Description : \
 Use FeatureCountsto quantify each BLAST result remaining after filtering.
 - Usage :
 ```bash
@@ -122,7 +123,7 @@ Use FeatureCountsto quantify each BLAST result remaining after filtering.
 output directories (resultDirectories_T.csv and resultDirectories_N.csv)
 
 4. Data summarisation and visualization
-- Description : 
+- Description : \
 Generate three tables and three groups of graphs from the quantification results.
 - Usage :
 ```bash
