@@ -2,3 +2,5 @@
 
 data/HERV_ORF_dict.tar.gz
 data/HervOrfBlastpDB.tar.gz
+data/hg19/
+data/hg19.tar.gz
