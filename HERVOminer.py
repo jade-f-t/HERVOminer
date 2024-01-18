@@ -5,10 +5,10 @@ import sys
 
 from build_parser import build_parser
 
-from ./src/func1_blastORF import func1_blastORF
-from ./src/func2_summarize_annotation import func2_summarize_annotation
-from ./src/func3_quantification import func3_quantification
-from ./src/func4_outputResult import func4_outputResult
+from func1_blastORF import func1_blastORF
+from func2_summarize_annotation import func2_summarize_annotation
+from func3_quantification import func3_quantification
+from func4_outputResult import func4_outputResult
 
 if __name__ == "__main__":
 	parser = build_parser()
