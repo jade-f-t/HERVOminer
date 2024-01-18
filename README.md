@@ -68,6 +68,8 @@ Each tumor sample need to have its corresponding normal sample. The sample id fi
 - Format : \
 3 fields : sample id, sample type (T / N), directory
 - Example input format : 
+
+
 | <!-- -->    | <!-- -->    | <!-- -->    |
 |-------------|-------------|-------------|
 | 10   | T   | /Users/jade-f-t/data/10T.bam   | 
