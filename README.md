@@ -49,6 +49,7 @@ Please decompress the included compressed data files before use, as they contain
 cd data 
 tar -xzvf HERV_ORF_dict.tar.gz
 tar -xzvf HervOrfBlastpDB.tar.gz
+tar -xzvf hg19.tar.gz
 cd ..
 ```
 

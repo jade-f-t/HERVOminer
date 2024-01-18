@@ -1,3 +1,4 @@
 .DS_Store
 
-data/
+data/HERV_ORF_dict.tar.gz
+data/HervOrfBlastpDB.tar.gz
