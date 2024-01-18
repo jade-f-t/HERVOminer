@@ -15,21 +15,21 @@ def blastp():
 	output_path = tempfile.mkdtemp() 
 
 	if uploaded_file is not None:
-	    input_file_path = os.path.join(output_path, uploaded_file.name)
-	    with open(input_file_path, "wb") as f:
-	        f.write(uploaded_file.getbuffer())
-	    
-	    error = func1_blastORF(input_file_path, output_path)
-	    if error:
-	        st.error(f"BLASTp error: {error}")
-	    else:
-	        st.success("BLASTp analysis completed.")
+		input_file_path = os.path.join(output_path, uploaded_file.name)
+		with open(input_file_path, "wb") as f:
+			f.write(uploaded_file.getbuffer())
+		
+		error = func1_blastORF(input_file_path, output_path)
+		if error:
+			st.error(f"BLASTp error: {error}")
+		else:
+			st.success("BLASTp analysis completed.")
 
 		if st.button("Download BLASTp Result"):
-		    output_file = os.path.join(output_path, "blastp_output.txt")
-		    with open(output_file, "rb") as f:
-		        data = f.read()
-		    	st.download_button(label="Download BLASTp Output", data=data, file_name="blastp_output.txt", mime="text/plain")
+			output_file = os.path.join(output_path, "blastp_output.txt")
+			with open(output_file, "rb") as f:
+				data = f.read()
+				st.download_button(label="Download BLASTp Output", data=data, file_name="blastp_output.txt", mime="text/plain")
 			
 
 
