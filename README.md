@@ -171,7 +171,7 @@ This command can finish all of the above steps all at once. The outputs are same
 -d <set the dpi of the figures>
 ```
 
-### Example final outputs
+## Example final outputs
 - Figure 1 : Distribution of Total Counts in Tumor and Normal Samples for Each Peptide
 	- Description : \
 	a heatmap comparing total counts of tumor and normal samples in each peptide
