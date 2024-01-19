@@ -173,6 +173,6 @@ This command can finish all of the above steps all at once. The outputs are same
 
 ### Example final outputs
 <img src="assets/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_for_Each_Peptide.png" width="600" />
-<!-- ![Figure 1](assets/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_for_Each_Peptide.png) -->
+
 ![Animation of Plot 2](assets/Distribution_of_Total_Counts_in_Tumor_and_Normal_Samples_Across_HERV_Regions_of_Each_Query_Peptide.gif)
 ![Animation of Plot 3](assets/Distribution_of_Total_Counts_Across_HERV_Regions_in_Each_Sample_for_Peptide.gif)
