@@ -1,5 +1,18 @@
 # HERVOminer
 
+## Table of Contends
+- [Description](#description)
+- [Installation](#installation)
+	- [System Requirements](#system-requirements)
+	- [Installing Miniconda](#installing-miniconda)
+	- [Setting Up a Conda Environment](#setting-up-a-conda-environment)
+	- [Installing HERVOminer]#installing-hervominer
+- [Implementation](#implementation)
+	- [Input files format](#input-files-format)
+	- [Separated Subcommands](#separated-subcommands)
+	- [Single Command Workflow](#single-command-workflow)
+- [Example final outputs](#example-final-outputs)
+
 ## Description
 HERVOminer is a tool that capable of determining whether the query peptides originated from Human Endogenous retroviruses (HERVs) regions, quantify their expression and visualize the result.
 
