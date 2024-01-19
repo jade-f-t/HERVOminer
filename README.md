@@ -159,11 +159,10 @@ This command can finish all of the above steps all at once. The outputs are same
 ```
 
 ### Example final outputs
-<p float="left">
-  <img src="assets/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_for_Each_Peptide.png" width="100" />
-  <img src="assets/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_Across_HERV_Regions_of_Peptide_1.png" width="100" /> 
-  <img src="assets/Distribution_of_Total_Counts_Across_HERV_Regions_in_Each_Sample_for_Peptide_1.png" width="100" />
-</p>
+[![Thumbnail of Plot 1](assets/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_for_Each_Peptide.png)](assets/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_for_Each_Peptide.png))
+[![Thumbnail of Plot 2](assets/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_Across_HERV_Regions_of_Peptide_1.png)](assets/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_Across_HERV_Regions_of_Peptide_1.png)
+[![Thumbnail of Plot 3](assets/Distribution_of_Total_Counts_Across_HERV_Regions_in_Each_Sample_for_Peptide_1.png)](assets/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_Across_HERV_Regions_of_Peptide_1.png)
+
 <!-- ![Distribution of Total Counts in Tumor and Normal Samples for Each Peptide](assets/)
 ![Distribution of Total Counts in Tumor and Normal Samples Across HERV Regions of Each Query Peptide]()
 ![Distribution of Total Counts Across HERV Regions in Each Sample for Peptide]()
