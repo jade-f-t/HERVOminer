@@ -179,16 +179,26 @@ This command can finish all of the above steps all at once. The outputs are same
 
 - Figure 2 : Distribution of Total Counts in Tumor and Normal Samples Across HERV Regions of Each Query Peptide
 	- Description : \
-	heatmaps for each peptide which shows distribution of total counts of corresponding HERV region sequences. 
+	heatmaps for each peptide which shows distribution of total counts of corresponding HERV region sequences.  \
 ![Animation of Plot 2](assets/Distribution_of_Total_Counts_in_Tumor_and_Normal_Samples_Across_HERV_Regions_of_Each_Query_Peptide.gif)
 - Figure 3 : Distribution of Total Counts Across HERV Regions in Each Sample for Peptide
 	- Description : \
-	heatmaps for each peptide, which shows the distribution of total counts of each HERV region within an individual sample.
+	heatmaps for each peptide, which shows the distribution of total counts of each HERV region within an individual sample. \
 ![Animation of Plot 3](assets/Distribution_of_Total_Counts_Across_HERV_Regions_in_Each_Sample_for_Peptide.gif)
 
 - Table 1 : Quantification Summary Across All Samples
 	- Description : \
 	A comprehensive summary of all quantification results
+
+
+| Sample | HERV regions           | Tumour reads | Total reads | Sample total reads | ORF                              | TSA       | Strand | Padding sequence                                                                                                                                                  |
+|--------|------------------------|--------------|-------------|--------------------|----------------------------------|-----------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 11T    | chr14:31742452-31742478 | 1            | 1           | 1                  | 2_1_4099_chr14_31741013-31750035_3_ORF19 | VILPPQPPK | +      | TTTAGTAGAGACAGGGTTTCTCCATGTTGGTCAGGCTGGTCTTGAACTCCTGACCTCAGGTGATCCTCCCACCTCAGCCTCCCAAAGTGATGGGATTACAGGCGTGAGCCACTGTGCCTGGCTGTTTTTTTTTTTTTTCCTCCTAG |
+| 14T    | chr2:130726841-130726867 | 1            | 1           | 1                  | 4_1_679_chr2_130719470-130727258_5_ORF74  | VILPPQPPK | +      | TACAGTGGAGTACACTGGTACAATTATAGCTCACTGCAGACTCAAACTCCTGGGCTAAAGTTATCCTCCCACCTCAGCCTCCCAAGTAGCTGGGATCATCACAGGCATGCACCACCACGCCTGGCTAGGTTTTTTGTTTTTTATTT |
+| 11N    | chr10:35698907-35698933 | 0            | 4           | 1                  | 5_1_3222_chr10_35691988-35699048_5_ORF74  | VILPPQPPK | +      | TTTTGTAGAGACAGGGTCTTGCTATGTTGCCCAGGCTGATCTTGAACTTCTGGGCTCCAGTGATCCTCCCACCTCAGCCTCCCAAAGTGCTGGGATTATAAGCATGAGCCCCTGCACCAGCCATGTGATTGTTAGATTGTGCAACT |
+| 20N    | chr10:35698907-35698933 | 0            | 4           | 1                  | 5_1_3222_chr10_35691988-35699048_5_ORF74  | VILPPQPPK | +      | TTTTGTAGAGACAGGGTCTTGCTATGTTGCCCAGGCTGATCTTGAACTTCTGGGCTCCAGTGATCCTCCCACCTCAGCCTCCCAAAGTGCTGGGATTATAAGCATGAGCCCCTGCACCAGCCATGTGATTGTTAGATTGTGCAACT |
+| ... | ... | ... | ... | ... | ... | ... | ... | ... |
+
 - Table 2 : Maximal HERV Region Counts per Query Peptide Across All Samples
 	- Description : \
 	Identifies the HERV region with the highest total counts for each query peptide
