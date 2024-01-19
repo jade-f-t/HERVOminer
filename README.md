@@ -1,5 +1,18 @@
 # HERVOminer
 
+## Table of Contends
+- [Description](#description)
+- [Installation](#installation)
+	- [System Requirements](#system-requirements)
+	- [Installing Miniconda](#installing-miniconda)
+	- [Setting Up a Conda Environment](#setting-up-a-conda-environment)
+	- [Installing HERVOminer](#installing-hervominer)
+- [Implementation](#implementation)
+	- [Input files format](#input-files-format)
+	- [Separated Subcommands](#separated-subcommands)
+	- [Single Command Workflow](#single-command-workflow)
+- [Example final outputs](#example-final-outputs)
+
 ## Description
 HERVOminer is a tool that capable of determining whether the query peptides originated from Human Endogenous retroviruses (HERVs) regions, quantify their expression and visualize the result.
 
@@ -159,8 +172,7 @@ This command can finish all of the above steps all at once. The outputs are same
 ```
 
 ### Example final outputs
-![Distribution of Total Counts in Tumor and Normal Samples for Each Peptide](assets/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_for_Each_Peptide.png)
-![Distribution of Total Counts in Tumor and Normal Samples Across HERV Regions of Each Query Peptide](assets/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_Across_HERV_Regions_of_Peptide_1.png)
-![Distribution of Total Counts Across HERV Regions in Each Sample for Peptide](assets/Distribution_of_Total_Counts_Across_HERV_Regions_in_Each_Sample_for_Peptide_1.png)
+<img src="assets/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_for_Each_Peptide.png" width="600" />
 
-
+![Animation of Plot 2](assets/Distribution_of_Total_Counts_in_Tumor_and_Normal_Samples_Across_HERV_Regions_of_Each_Query_Peptide.gif)
+![Animation of Plot 3](assets/Distribution_of_Total_Counts_Across_HERV_Regions_in_Each_Sample_for_Peptide.gif)
