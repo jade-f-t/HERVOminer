@@ -537,6 +537,7 @@ def combine_tumour_normal_results(tumour_result, normal_result):
 	return total_result
 
 def get_padding(total_result, outputPath):
+	print(total_result.keys())
 
 	## produce the bed file
 	for peptide in total_result.keys():
