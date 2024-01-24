@@ -40,8 +40,8 @@ def func4_outputResult(inputPeptide, inputCsvFile, tumourResultDirectories, norm
 	
 	# STEP 5.1 : create plot 1
 	output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dpi)
-	output_plot_2(total_result, tumour, TSA_list, outputPath, dpi)
-	output_plot_3(total_result, tumour, TSA_list, outputPath, dpi)
+	output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero)
+	output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero)
 	return None
 
 def output_overall_csv(tumour_result, total_result, TSA_list, outputPath, withZero):
@@ -282,7 +282,7 @@ def output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dp
 
 
 
-def output_plot_2(total_result, tumour, TSA_list, outputPath, dpi):
+def output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero):
 	
 	i = 0
 	peptide_len = len(total_result.keys())
@@ -320,6 +320,12 @@ def output_plot_2(total_result, tumour, TSA_list, outputPath, dpi):
 				tumour_count += int(total_result[peptide][regions[peptide][region]]['samples'][f"{sample}T"])
 				normal_count += int(total_result[peptide][regions[peptide][region]]['samples'][f"{sample}N"])
 			
+			## filter zero if withZero == 0
+			if (withZero == 0):
+				if (tumour_count == 0 and normal_count == 0):
+					regions_for_plot[peptide].remove(region)
+					continue
+
 			counts[peptide][i].append(tumour_count)
 			counts[peptide][i].append(normal_count)
 			i += 1
@@ -351,7 +357,7 @@ def output_plot_2(total_result, tumour, TSA_list, outputPath, dpi):
 
 
 
-def output_plot_3(total_result, tumour, TSA_list, outputPath, dpi):
+def output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero):
 	
 	i = 0
 	peptide_len = len(total_result.keys())
@@ -392,6 +398,12 @@ def output_plot_3(total_result, tumour, TSA_list, outputPath, dpi):
 			for sample in samples_for_plot:
 				sample_count = total_result[peptide][regions[peptide][region]]['samples'][sample]
 				counts[peptide][i].append(int(sample_count))
+
+			## remove zero if withZero == 0
+			if (withZero == 0):
+				if (all(item == 0 for item in counts[peptide][i])):
+					regions_for_plot[peptide].remove(region)
+					continue
 			i += 1
 
 	for peptide in regions_for_plot:
