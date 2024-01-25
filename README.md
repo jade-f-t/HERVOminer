@@ -62,7 +62,7 @@ Please decompress the included compressed data files before use, as they contain
 cd data 
 tar -xzvf HERV_ORF_dict.tar.gz
 tar -xzvf HervOrfBlastpDB.tar.gz
-cat hg19_part_* > hg19.tar.gz
+cat hg19.tar.gz.part* > hg19.tar.gz
 tar -xzvf hg19.tar.gz
 cd ..
 ```
@@ -190,7 +190,18 @@ heatmaps for each peptide, which shows the distribution of total counts of each 
 
 ### Table 1 : Quantification Summary Across All Samples
 - Description : \
-A comprehensive summary of all quantification results
+A comprehensive summary of all quantification results. \
+Fields : \
+Sample - Sample Id \
+HERV regions - location of the region (format : chr{}:{start position}-{end position})\
+Tumor reads - the total read of the HERV region in all of the tumour samples\
+Total reads - the total read of the HERV region in all of the samples\
+Sample total reads - the total read of the HERV region in the specific sample\
+ORF - the ID of the open reading frame of the HERV region\
+TSA - the amino acid sequence of the TSA\
+Strand - "+" : forward strand, "-" : reverse strand\
+Padding sequence - DNA sequence of the ORF with additional sequence ~60 nucleotides before and after the original sequence
+
 
 
 | Sample | HERV regions           | Tumour reads | Total reads | Sample total reads | ORF                              | TSA       | Strand | Padding sequence                                                                                                                                                  |
@@ -203,8 +214,16 @@ A comprehensive summary of all quantification results
 
 ### Table 2 : Maximal HERV Region Counts per Query Peptide Across All Samples
 - Description : \
-Identifies the HERV region with the highest total counts for each query peptide
-
+Identifies the HERV region with the highest total counts for each query peptide \
+Fields : \
+Peptide - Peptide Id \
+HERV regions - location of the region (format : chr{}:{start position}-{end position})\
+Tumor reads - the total read of the HERV region in all of the tumour samples\
+Total reads - the total read of the HERV region in all of the samples\
+ORF - the ID of the open reading frame of the HERV region\
+TSA - the amino acid sequence of the TSA\
+Strand - "+" : forward strand, "-" : reverse strand\
+Padding sequence - DNA sequence of the ORF with additional sequence ~60 nucleotides before and after the original sequence
 
 | Peptide | HERV regions            | Tumour reads | Total reads | ORF                                   | TSA       | Strand | Padding sequence                                                                                                                                 |
 |---------|-------------------------|--------------|-------------|---------------------------------------|-----------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------|
