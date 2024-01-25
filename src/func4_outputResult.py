@@ -40,6 +40,7 @@ def func4_outputResult(inputPeptide, inputCsvFile, tumourResultDirectories, norm
 	normal = inputCsvResult[1]
 	
 	# STEP 5.1 : create plot 1
+	dpi = int(dpi)
 	output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dpi)
 	output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero)
 	output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero)
@@ -542,7 +543,6 @@ def get_padding(total_result, outputPath):
 	## produce the bed file
 	for peptide in total_result.keys():
 		for region in total_result[peptide]:
-			print(region)
 
 			if (region == 'total_count'):
 				continue
