@@ -41,6 +41,7 @@ def func4_outputResult(inputPeptide, inputCsvFile, tumourResultDirectories, norm
 	
 	# STEP 5.1 : create plot 1
 	dpi = int(dpi)
+	withZero = int(withZero)
 	output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dpi)
 	output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero)
 	output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero)
