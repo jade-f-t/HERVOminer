@@ -240,25 +240,20 @@ def output_sample_max_csv(total_result, outputPath):
 def output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dpi):
 	
 	i = 0
-	cell_height = 1.5
-
-	fig, ax = plt.subplots(figsize=(2 * cell_height + 5, cell_height * len(TSA_list) * 1.5 + 1))
-	
-	ax.set_title('Distribution of Total Counts in \nTumour and Normal Samples for Each Peptide', fontsize=20)
-	ax.set_xlabel('Sample Classification', fontsize=20)
-	ax.set_ylabel('Peptides', fontsize=20)
 
 	## x_axis : tumour and normal
 	grouping = ["Tumour", "Normal"]
 	## y_axis : peptide
 	peptides = []
+	peptides_for_plot = []
 
 	peptide_id = 1
 	for peptide in TSA_list:
 		if (str(peptide_id) in tumour_result):
 			peptides.append(peptide_id)
+			peptides_for_plot.append(TSA_list[int(peptide_id)-1])
 		peptide_id+=1
-
+	
 	## get the total counts
 	counts = []
 	for peptide in peptides:
@@ -266,6 +261,14 @@ def output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dp
 			tumour_counts = tumour_result[str(peptide)]["total_count"]
 			normal_counts = normal_result[str(peptide)]["total_count"]
 		counts.append([tumour_counts, normal_counts])
+
+	cell_height = 1.5
+
+	fig, ax = plt.subplots(figsize=(2 * cell_height + 5, cell_height * len(peptides_for_plot) * 1.5 + 1))
+	
+	ax.set_title('Distribution of Total Counts in \nTumour and Normal Samples for Each Peptide', fontsize=20)
+	ax.set_xlabel('Sample Classification', fontsize=20)
+	ax.set_ylabel('Peptides', fontsize=20)
 	
 	im = ax.imshow(counts, cmap='Blues')
 	divider = make_axes_locatable(ax)
@@ -273,7 +276,7 @@ def output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dp
 	cbar = ax.figure.colorbar(im, cax=cax, cmap='Blues', shrink = 0.5)
 	cbar.set_label('counts', rotation = -90,labelpad=10 , fontsize=20)
 	
-	ax.set_yticks(np.arange(len(peptides)) , labels=peptides, minor = False)
+	ax.set_yticks(np.arange(len(peptides)) , labels=peptides_for_plot, minor = False)
 	ax.set_xticks(np.arange(len(grouping)), labels=grouping)
 
 	plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
@@ -316,8 +319,7 @@ def output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero):
 		for region in regions[peptide]:
 			tumour_count = 0
 			normal_count = 0
-			counts[peptide].append([])
-
+			
 			## get the corresponding count and save in 2d array	
 			for sample in tumour:
 				tumour_count += int(total_result[peptide][regions[peptide][region]]['samples'][f"{sample}T"])
@@ -329,6 +331,7 @@ def output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero):
 					regions_for_plot[peptide].remove(region)
 					continue
 
+			counts[peptide].append([])
 			counts[peptide][i].append(tumour_count)
 			counts[peptide][i].append(normal_count)
 			i += 1
@@ -406,8 +409,10 @@ def output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero):
 			if (withZero == 0):
 				if (all(item == 0 for item in counts[peptide][i])):
 					regions_for_plot[peptide].remove(region)
+					counts[peptide].remove(counts[peptide][i])
 					continue
 			i += 1
+
 
 	for peptide in regions_for_plot:
 
