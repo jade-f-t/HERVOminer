@@ -20,6 +20,7 @@ def func4_outputResult(inputPeptide, inputCsvFile, tumourResultDirectories, norm
 	tumour_result = extractResult(tumourResultDirectories, TSA_list)
 	normal_result = extractResult(normalResultDirectories, TSA_list)
 	total_result = combine_tumour_normal_results(tumour_result, normal_result)
+
 	
 	# STEP 3 : get the padding sequence for all region in the result and output as fasta files for each region
 	get_padding(tumour_result, outputPath)
@@ -537,11 +538,11 @@ def combine_tumour_normal_results(tumour_result, normal_result):
 	return total_result
 
 def get_padding(total_result, outputPath):
-	print(total_result.keys())
 
 	## produce the bed file
 	for peptide in total_result.keys():
 		for region in total_result[peptide]:
+			print(region)
 
 			if (region == 'total_count'):
 				continue
