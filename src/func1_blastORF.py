@@ -1,10 +1,14 @@
 import subprocess
+import os 
+import sys
 
 def func1_blastORF(inputPeptide, outputPath):
-	
+			
 	blastError = blastp(inputPeptide, outputPath)
 	if (blastError is not None):
-		return f"blastp error : {blastError}"
+		print('Error: please check your inputs', file = sys.stderr)
+		return blastError
+		sys.exit(1)
 
 	return None
 
