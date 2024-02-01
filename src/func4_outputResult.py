@@ -108,7 +108,7 @@ def output_overall_csv(tumour_result, total_result, TSA_list, outputPath, withZe
                     "ORF": ORF,
                     "TSA": TSA,
                     "Strand": strand,
-                    "Padding sequence": padding_seq
+                    "Validation reading sequence": padding_seq
                 }
 
                 data_rows.append(row)
@@ -167,7 +167,7 @@ def output_total_max_csv(tumour_result, total_result, TSA_list, outputPath):
 			"ORF": ORF,
 			"TSA": TSA,
 			"Strand": strand,
-			"Padding sequence": padding_seq
+			"Validation reading sequence": padding_seq
 		})
 
 	df = pd.DataFrame(data_rows)

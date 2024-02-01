@@ -154,7 +154,7 @@ Generate three tables and three groups of graphs from the quantification results
 -o <path to the output file, optional argument, default value : current directory>
 -d <set the dpi of the figures, optional argument, default value : 100>
 -sr <selected regions to appear in the plots in the form <region_id>,<region_id>,... eg. 2_1_3166,10_1_3514,15_1_2630, optional argument, defualt value : None>
--sp <selected peptide to generate respective plots, please input the id of the peptide (shown on the table 'Maximal HERV Region Counts per Query Peptide Across All Sample' ), optional argument, defualt value : None>
+-sp <selected peptide to generate respective plots, please input the id of the peptide (shown on the table 'Maximal HERV Region Counts per Query Peptide Across All Sample'), optional argument, defualt value : None>
 ```
 - Output : 3 Tables , 3 Figures
 
@@ -202,11 +202,11 @@ Sample total reads - the total read of the HERV region in the specific sample\
 ORF - the ID of the open reading frame of the HERV region\
 TSA - the amino acid sequence of the TSA\
 Strand - "+" : forward strand, "-" : reverse strand\
-Padding sequence - DNA sequence of the ORF with additional sequence ~60 nucleotides before and after the original sequence
+Validation reading sequence - DNA sequence of the ORF with additional sequence ~60 nucleotides before and after the original sequence
 
 
 
-| Sample | HERV regions           | Tumour reads | Total reads | Sample total reads | ORF                              | TSA       | Strand | Padding sequence                                                                                                                                                  |
+| Sample | HERV regions           | Tumour reads | Total reads | Sample total reads | ORF                              | TSA       | Strand | Validation reading sequence                                                                                                                                                  |
 |--------|------------------------|--------------|-------------|--------------------|----------------------------------|-----------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 11T    | chr14:31742452-31742478 | 1            | 1           | 1                  | 2_1_4099_chr14_31741013-31750035_3_ORF19 | VILPPQPPK | +      | TTTAGTAGAGACAGGGTTTCTCCATGTTGGTCAGGCTGGTCTTGAACTCCTGACCTCAGGTGATCCTCCCACCTCAGCCTCCCAAAGTGATGGGATTACAGGCGTGAGCCACTGTGCCTGGCTGTTTTTTTTTTTTTTCCTCCTAG |
 | 14T    | chr2:130726841-130726867 | 1            | 1           | 1                  | 4_1_679_chr2_130719470-130727258_5_ORF74  | VILPPQPPK | +      | TACAGTGGAGTACACTGGTACAATTATAGCTCACTGCAGACTCAAACTCCTGGGCTAAAGTTATCCTCCCACCTCAGCCTCCCAAGTAGCTGGGATCATCACAGGCATGCACCACCACGCCTGGCTAGGTTTTTTGTTTTTTATTT |
@@ -225,9 +225,9 @@ Total reads - the total read of the HERV region in all of the samples\
 ORF - the ID of the open reading frame of the HERV region\
 TSA - the amino acid sequence of the TSA\
 Strand - "+" : forward strand, "-" : reverse strand\
-Padding sequence - DNA sequence of the ORF with additional sequence ~60 nucleotides before and after the original sequence
+Validation reading sequence - DNA sequence of the ORF with additional sequence ~60 nucleotides before and after the original sequence
 
-| Peptide | HERV regions            | Tumour reads | Total reads | ORF                                   | TSA       | Strand | Padding sequence                                                                                                                                 |
+| Peptide | HERV regions            | Tumour reads | Total reads | ORF                                   | TSA       | Strand | Validation reading sequence                                                                                                                                 |
 |---------|-------------------------|--------------|-------------|---------------------------------------|-----------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------|
 | 1       | chr11:70055837-70055863 | 83           | 151         | 9_1_3537_chr11_70055744-70066106_2_ORF96 | VILPPQPPK | -      | TTTTTTTAGAGATGAGGTTTCCCTATGTTGGCGAGGCTGGCCTCAAACTCCTGGGTTCAAGTAATCCTCCCACCTCAGCCTCCCAAAGTGCAGGGATTACAGATGAGAGCCACTGCACCTGGCCTAGCGCCCAGTTTTAATTGAGG |
 | 2       | chr8:103996760-103996786 | 8            | 8           | 21_2_2916_chr8_103991601-104003946_6_ORF54  | AVLLPQPPK | +      | CAAGCTGGAGTGCAGTGGCACAATCTCGGGTCACTGCAACCTCCGCCTCCCAGATTCAAGCAGTTCTCCTGCCTCAGCCTCCCAAATAGCTGGGATTACAGGCACCTGCCACCATGTCTGGCTAAATTTTTGTATTTTTTTAGTAG |
