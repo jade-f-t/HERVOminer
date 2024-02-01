@@ -150,9 +150,11 @@ Generate three tables and three groups of graphs from the quantification results
 -i <path to the input csv file with all of the bam file path> \ 
 -T <path to the resultDirectories_T.csv file> \ 
 -N <path to the resultDirectories_N.csv file> \ 
--z <include region with zero count or not, 1 : with zero, 0: without zero> \ 
--o <path to the output file>
--d <set the dpi of the figures>
+-z <include region with zero count or not, 1 : with zero, 0: without zero, optional argument, default value : 0> \ 
+-o <path to the output file, optional argument, default value : current directory>
+-d <set the dpi of the figures, optional argument, default value : 100>
+-sr <selected regions to appear in the plots in the form <region_id>,<region_id>,... eg. 2_1_3166,10_1_3514,15_1_2630, optional argument, defualt value : None>
+-sp <selected peptide to generate respective plots, please input the id of the peptide (shown on the table 'Maximal HERV Region Counts per Query Peptide Across All Sample' ), optional argument, defualt value : None>
 ```
 - Output : 3 Tables , 3 Figures
 

@@ -12,7 +12,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from func3_quantification import inputFileHandle
 
-def func4_outputResult(inputPeptide, inputCsvFile, tumourResultDirectories, normalResultDirectories, outputPath, withZero, dpi):
+def func4_outputResult(inputPeptide, inputCsvFile, tumourResultDirectories, normalResultDirectories, outputPath, withZero, dpi, selectedPeptide, selectedRegion):
 	# STEP 1 : get the input peptide sequence
 	TSA_list = getTSAlist(inputPeptide)
 
@@ -42,10 +42,20 @@ def func4_outputResult(inputPeptide, inputCsvFile, tumourResultDirectories, norm
 	# STEP 5.1 : create plot 1
 	dpi = int(dpi)
 	withZero = int(withZero)
-	output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dpi)
-	output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero)
-	output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero)
-	return None
+
+	if (selectedRegion != None and selectedPeptide == None):
+		return "Argument error: missing selectedPeptide, please include your selected peptide for the selected regions"
+	
+	if (selectedPeptide != None):
+		selectedRegion = selectedRegion.split(',')
+		output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero, selectedPeptide, selectedRegion)
+		output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero, selectedPeptide, selectedRegion)
+		return None
+	else :
+		output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dpi)
+		output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero, selectedPeptide, selectedRegion)
+		output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero, selectedPeptide, selectedRegion)
+		return None
 
 def output_overall_csv(tumour_result, total_result, TSA_list, outputPath, withZero):
 	
@@ -288,7 +298,7 @@ def output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dp
 
 
 
-def output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero):
+def output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero, selectedPeptide, selectedRegion):
 	
 	i = 0
 	peptide_len = len(total_result.keys())
@@ -311,6 +321,25 @@ def output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero):
 				regions[peptide]["_".join(region.split("_")[0:3])] = region
 				regions_for_plot[peptide].append("_".join(region.split("_")[0:3]))
 	
+
+	## if user only need specific peptide and region
+	if (selectedPeptide != None):
+		regions_for_plot = {
+			selectedPeptide : regions_for_plot[selectedPeptide]
+		}
+		regions = {
+			selectedPeptide : regions[selectedPeptide]
+		}
+		if (selectedRegion != None):
+			regions_for_plot = {
+				selectedPeptide : selectedRegion
+			}
+			r_list = list(regions[selectedPeptide].keys())
+			for r in r_list:
+				if r not in selectedRegion:
+					regions[selectedPeptide].pop(r)
+
+	
 	## counts : peptide (list) => each region (lists) => group's total count (integer)
 	counts = {}
 	for peptide in regions:
@@ -328,13 +357,16 @@ def output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero):
 			## filter zero if withZero == 0
 			if (withZero == 0):
 				if (tumour_count == 0 and normal_count == 0):
-					regions_for_plot[peptide].remove(region)
+					if (region in regions_for_plot[peptide]):
+						regions_for_plot[peptide].remove(region)
 					continue
 
 			counts[peptide].append([])
 			counts[peptide][i].append(tumour_count)
 			counts[peptide][i].append(normal_count)
 			i += 1
+
+	
 
 	for peptide in regions_for_plot:
 		cell_height = 1.5	
@@ -363,7 +395,7 @@ def output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero):
 
 
 
-def output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero):
+def output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero, selectedPeptide, selectedRegion):
 	
 	i = 0
 	peptide_len = len(total_result.keys())
@@ -392,6 +424,23 @@ def output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero):
 		samples_for_plot.append(f"{sample}T")
 		samples_for_plot.append(f"{sample}N")
 
+	## if user only need specific region and peptide
+	if (selectedPeptide != None):
+		regions_for_plot = {
+			selectedPeptide : regions_for_plot[selectedPeptide]
+		}
+		regions = {
+			selectedPeptide : regions[selectedPeptide]
+		}
+		if (selectedRegion != None):
+			regions_for_plot = {
+				selectedPeptide : selectedRegion
+			}
+			r_list = list(regions[selectedPeptide].keys())
+			for r in r_list:
+				if r not in selectedRegion:
+					regions[selectedPeptide].pop(r)
+
 	## counts : peptide (list) => each region (lists) => sample's count (integer)
 	counts = {}
 	for peptide in regions:
@@ -408,8 +457,9 @@ def output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero):
 			## remove zero if withZero == 0
 			if (withZero == 0):
 				if (all(item == 0 for item in counts[peptide][i])):
-					regions_for_plot[peptide].remove(region)
-					counts[peptide].remove(counts[peptide][i])
+					if (region in regions_for_plot[peptide]):
+						regions_for_plot[peptide].remove(region)
+						counts[peptide].remove(counts[peptide][i])
 					continue
 			i += 1
 

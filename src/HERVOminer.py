@@ -27,7 +27,7 @@ if __name__ == "__main__":
 		returnValue = func3_quantification(args.inputCsvFile, args.annotationFile, args.outputPath,args.threadNo, args.parallelTask)
 
 	elif args.subcmd == 'outputResult':
-		returnValue = func4_outputResult(args.inputPeptide, args.inputCsvFile, args.tumourResultDirectories, args.normalResultDirectories, args.outputPath, args.withZero, args.dpi)
+		returnValue = func4_outputResult(args.inputPeptide, args.inputCsvFile, args.tumourResultDirectories, args.normalResultDirectories, args.outputPath, args.withZero, args.dpi, args.selectedPeptide, args.selectedRegion)
 
 	elif args.subcmd == 'HERVOminer':
 		blastpOutput = f"{args.outputPath}/blastp_output.txt"

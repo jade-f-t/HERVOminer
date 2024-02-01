@@ -38,6 +38,8 @@ def build_parser():
 	outputResult_parser.add_argument("-z", "--with_zero", default = 0, help = "include region with zero count or not, 1 : with zero, 0: without zero", dest = "withZero")
 	outputResult_parser.add_argument("-o", "--output", default = os.getcwd(), help = "path to the output file", dest = "outputPath")
 	outputResult_parser.add_argument("-d", "--dpi", default = 100, help = "set the dpi of the figures", dest = "dpi")
+	outputResult_parser.add_argument("-sp", "--selected_peptide", default = None, help = "optional value, to output the specific plots of the selected peptide, please input the peptide id shown on the table 'Maximal HERV Region Counts per Query Peptide Across All Sample' ", dest = "selectedPeptide")
+	outputResult_parser.add_argument("-sr", "--selected_region", default = None, help = "optional value, to output plots with the selected regions only", dest = "selectedRegion")
 
 
 	# HERVtool(args.inputPeptide, args.inputCsvFile, args.outputPath, args.thread, args.group)
