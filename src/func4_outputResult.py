@@ -8,181 +8,204 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import numpy as np
+import sys
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from func3_quantification import inputFileHandle
 
-def func4_outputResult(inputPeptide, inputCsvFile, tumourResultDirectories, normalResultDirectories, outputPath, withZero, dpi):
+def func4_outputResult(inputPeptide, inputCsvFile, tumourResultDirectories, normalResultDirectories, outputPath, withZero, dpi, selectedPeptide, selectedRegion):
+	"""
+	Produce 3 tables and 3 graphs for the analysis results
+	Input : 
+		inputPeptide : path to the fasta file containing the peptide sequences
+		inputCsvFile : path to the csv file with paths to the bam files
+		tumourResultDirectories : path to the csv file generate from the quantification step which contain the paths to the featureCounts results of the tumour sample
+		normalResultDirectories : path to the csv file generate from the quantification step which contain the paths to the featureCounts results of the normal sample
+		outputPath : path of the output files
+		withZero : 1/0 whether to contain the zero count regions
+		dpi : the dpi of the output graph
+		selectedPeptide : optional, only show the selected peptide
+		selectedRegion : optional, only show the selected region
+	Output : 
+		3 tables and 3 graphs
+	"""
 	# STEP 1 : get the input peptide sequence
-	TSA_list = getTSAlist(inputPeptide)
+	[TSA_list,TSA_ID] = getTSAlist(inputPeptide)
 
 	# STEP 2 : input the sample result directories file and load the output dictionary for that specific sample
-	tumour_result = extractResult(tumourResultDirectories, TSA_list)
-	normal_result = extractResult(normalResultDirectories, TSA_list)
+	tumour_result = extractResult(tumourResultDirectories, TSA_list, TSA_ID)
+	normal_result = extractResult(normalResultDirectories, TSA_list, TSA_ID)
 	total_result = combine_tumour_normal_results(tumour_result, normal_result)
-
 	
 	# STEP 3 : get the padding sequence for all region in the result and output as fasta files for each region
 	get_padding(tumour_result, outputPath)
 	
 	# STEP 4.1 : create the overall csv
-	output_overall_csv(tumour_result, total_result,TSA_list, outputPath, withZero)
+	df1 = output_overall_csv(tumour_result, total_result,TSA_list, outputPath, withZero, TSA_ID)
 	# STEP 4.2 : create the peptide maximum region csv file
-	output_total_max_csv(tumour_result, total_result, TSA_list, outputPath)
+	df2 = output_total_max_csv(tumour_result, total_result, TSA_list, outputPath, TSA_ID)
 	# STEP 4.3 : create the sample maximum region csv file
-	output_sample_max_csv(total_result, outputPath)
-
+	df3 = output_sample_max_csv(total_result, outputPath)
 	# STEP 5.0 : preprocess data for the plots
-	inputCsvResult, inputCsvError = inputFileHandle(inputCsvFile)
-	if (inputCsvError is not None):
-		return f"input CSV file error : {inputCsvError}"
+	try:
+		inputCsvResult, inputCsvError = inputFileHandle(inputCsvFile)
+		if (inputCsvError is not None):
+			raise ValueError(f"input CSV file error : {inputCsvError}")
+	except ValueError as err:
+		print(f"{err}", file = sys.stderr)
+		raise ValueError(f"An error occurred, please check your inputs : {err}")
+		sys.exit(1)
+	except Exception as err:
+		print(f"An error occurred, please check your inputs : {err}", file = sys.stderr)
+		raise ValueError(f"An error occurred, please check your inputs : {err}")
+		sys.exit(1)
 	tumour = inputCsvResult[0]
 	normal = inputCsvResult[1]
-	
+
 	# STEP 5.1 : create plot 1
 	dpi = int(dpi)
 	withZero = int(withZero)
-	output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dpi)
-	output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero)
-	output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero)
-	return None
-
-def output_overall_csv(tumour_result, total_result, TSA_list, outputPath, withZero):
-	
-	with open(f"{outputPath}/Quantification_Summary_Across_All_Samples.csv", 'w', newline = '\n') as output_file:
-		fields = [
-			"Sample",
-			"HERV regions",
-			"Tumour reads",
-			"Total reads",
-			"Sample total reads",
-			"ORF",
-			"TSA",
-			"Strand",
-			"Padding sequence"
-		]
-
-		writer =  csv.DictWriter(output_file, fieldnames = fields)
-		writer.writeheader()
-
-		for peptide in total_result.keys():
-			
-			for region in total_result[peptide]:
-				if (region == 'total_count'):
-					continue
-				for sample in total_result[peptide][region]['samples']:
-					if (int(withZero) == 0):
-						if int(total_result[peptide][region]['samples'][sample]) == 0:
-							continue
-					HERV_region = f"{total_result[peptide][region]['data']['chr']}:{total_result[peptide][region]['data']['start']}-{total_result[peptide][region]['data']['end']}"
-					total_tumour_reads = tumour_result[peptide][region]['data']['total_count_region']
-					total_reads = total_result[peptide][region]['data']['total_count_region']
-					sample_total_reads = total_result[peptide][region]['samples'][sample]
-					ORF = region
-					TSA = TSA_list[int(peptide) - 1]
-					strand = total_result[peptide][region]['data']['strand']
-					
-					## get the padding sequence from the fasta file
-					with open(f"{outputPath}/extracted_{peptide}_{region}_seq.fasta") as file:
-						for seq in SeqIO.parse(file, "fasta"):
-							padding_seq = seq.seq.upper()
-							if (total_result[peptide][region]['data']['strand'] == '-'):
-								padding_seq = seq.reverse_complement().seq.upper()
-					
-					data = {
-						"Sample": sample,
-						"HERV regions": HERV_region,
-						"Tumour reads": total_tumour_reads,
-						"Total reads": total_reads,
-						"Sample total reads": sample_total_reads,
-						"ORF": region,
-						"TSA": TSA,
-						"Strand": strand,
-						"Padding sequence": padding_seq
-					}
-
-					writer.writerow(data)
-
-	return None
-
-
-
-def output_total_max_csv(tumour_result, total_result, TSA_list, outputPath):
-
-	with open(f"{outputPath}/Maximal_HERV_Region_Counts_per_Query_Peptide_Across_All_Samples.csv", 'w', newline = '\n') as output_file:
-		fields = [
-			"Peptide",
-			"HERV regions",
-			"Tumour reads",
-			"Total reads",
-			"ORF",
-			"TSA",
-			"Strand",
-			"Padding sequence"
-		]
-
-		writer =  csv.DictWriter(output_file, fieldnames = fields)
-		writer.writeheader()
-
-		## get the region with maximum expression for each peptide
-		max_region = {}
-
-		for peptide in total_result:
-			## i = the maximum number of count
-			i = -1
+	try:
+		if (selectedRegion != None and selectedPeptide == None):
+			raise ValueError("Argument error: missing selectedPeptide, please include your selected peptide for the selected regions")
 		
-			for region in total_result[peptide]:
-				if region == "total_count":
-					continue
-				else:
-					## if the looped region is larger than the saved i, update it
-					if total_result[peptide][region]['data']['total_count_region'] > i:
-						max_region[peptide] = \
-							{
-							"region_data" : total_result[peptide][region]["data"],
-							"region_name" : region,
-							}
-						i = total_result[peptide][region]['data']['total_count_region']
+		if (selectedPeptide != None):
+			selectedRegion = selectedRegion.split(',')
+			fig1 = output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dpi, TSA_ID)
+			fig2 = output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero, selectedPeptide, selectedRegion, TSA_ID)
+			fig3 = output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero, selectedPeptide, selectedRegion, TSA_ID)
+			return [df1,df2,df3,fig1,fig2,fig3]
+		else :
+			fig1 = output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dpi, TSA_ID)
+			fig2 = output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero, selectedPeptide, selectedRegion, TSA_ID)
+			print(2)
+			fig3 = output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero, selectedPeptide, selectedRegion, TSA_ID)
+			print(3)
+			return [df1,df2,df3,fig1,fig2,fig3]
+	except ValueError as err:
+		print(f"{err}", file = sys.stderr)
+		raise ValueError(f"An error occurred, please check your inputs : {err}")
+		sys.exit(1)
+	except Exception as err:
+		print(f"An error occurred, please check your inputs : {err}", file = sys.stderr)
+		raise ValueError(f"An error occurred, please check your inputs : {err}")
+		sys.exit(1)
 
-			HERV_region = f"{max_region[peptide]['region_data']['chr']}:{max_region[peptide]['region_data']['start']}-{max_region[peptide]['region_data']['end']}"
-			total_tumour_reads = tumour_result[peptide][max_region[peptide]["region_name"]]['data']['total_count_region']
-			total_reads = total_result[peptide][max_region[peptide]["region_name"]]['data']['total_count_region']
-			ORF = max_region[peptide]["region_name"]
-			TSA = TSA_list[int(peptide) - 1]
-			strand = max_region[peptide]["region_data"]['strand']
-			## get the padding sequence from the fasta file
-			with open(f"{outputPath}/extracted_{peptide}_{max_region[peptide]['region_name']}_seq.fasta") as file:
-				for seq in SeqIO.parse(file, "fasta"):
-					padding_seq = seq.seq.upper()
-					if (total_result[peptide][region]['data']['strand'] == '-'):
-						padding_seq = seq.reverse_complement().seq.upper()
-			
-			data = {
-				"Peptide": peptide,
-				"HERV regions": HERV_region,
-				"Tumour reads": total_tumour_reads,
-				"Total reads": total_reads,
-				"ORF": ORF,
-				"TSA": TSA,
-				"Strand": strand,
-				"Padding sequence": padding_seq
-			}
 
-			writer.writerow(data)
+def output_overall_csv(tumour_result, total_result, TSA_list, outputPath, withZero, TSA_ID):
+    data_rows = []  
 
-	return None
+    for peptide in total_result.keys():
+        for region in total_result[peptide]:
+            if region == 'total_count':
+                continue
+            for sample in total_result[peptide][region]['samples']:
+                if int(withZero) == 0 and int(total_result[peptide][region]['samples'][sample]) == 0:
+                    continue
+
+                HERV_region = f"{total_result[peptide][region]['data']['chr']}:{total_result[peptide][region]['data']['start']}-{total_result[peptide][region]['data']['end']}"
+                total_tumour_reads = tumour_result[peptide][region]['data']['total_count_region']
+                total_reads = total_result[peptide][region]['data']['total_count_region']
+                sample_total_reads = total_result[peptide][region]['samples'][sample]
+                ORF = region
+                TSA = TSA_list[TSA_ID.index(peptide)]
+                strand = total_result[peptide][region]['data']['strand']
+                
+                # Get the padding sequence from the fasta file
+                with open(f"{outputPath}/extracted_{peptide}_{region}_seq.fasta") as file:
+                    for seq in SeqIO.parse(file, "fasta"):
+                        padding_seq = str(seq.seq.upper())
+                        if strand == '-':
+                            padding_seq = str(seq.reverse_complement().seq.upper())
+
+                row = {
+                    "Sample": sample,
+                    "HERV regions": HERV_region,
+                    "Tumour reads": total_tumour_reads,
+                    "Total reads": total_reads,
+                    "Sample total reads": sample_total_reads,
+                    "ORF": ORF,
+                    "TSA": TSA,
+                    "Strand": strand,
+                    "Validation reading sequence": padding_seq
+                }
+
+                data_rows.append(row)
+
+    # Create DataFrame from list of dictionaries
+    df = pd.DataFrame(data_rows)
+
+    df.to_csv(f"{outputPath}/Quantification_Summary_Across_All_Samples.csv", index=False)
+
+    return df
+
+
+
+def output_total_max_csv(tumour_result, total_result, TSA_list, outputPath, TSA_ID):
+	data_rows = []
+
+
+	## get the region with maximum expression for each peptide
+	max_region = {}
+
+	for peptide in total_result:
+		## i = the maximum number of count
+		i = -1
+	
+		for region in total_result[peptide]:
+			if region == "total_count":
+				continue
+			else:
+				## if the looped region is larger than the saved i, update it
+				if total_result[peptide][region]['data']['total_count_region'] > i:
+					max_region[peptide] = \
+						{
+						"region_data" : total_result[peptide][region]["data"],
+						"region_name" : region,
+						}
+					i = total_result[peptide][region]['data']['total_count_region']
+
+		HERV_region = f"{max_region[peptide]['region_data']['chr']}:{max_region[peptide]['region_data']['start']}-{max_region[peptide]['region_data']['end']}"
+		total_tumour_reads = tumour_result[peptide][max_region[peptide]["region_name"]]['data']['total_count_region']
+		total_reads = total_result[peptide][max_region[peptide]["region_name"]]['data']['total_count_region']
+		ORF = max_region[peptide]["region_name"]
+		TSA = TSA_list[TSA_ID.index(peptide)]
+		strand = max_region[peptide]["region_data"]['strand']
+		## get the padding sequence from the fasta file
+		with open(f"{outputPath}/extracted_{peptide}_{max_region[peptide]['region_name']}_seq.fasta") as file:
+			for seq in SeqIO.parse(file, "fasta"):
+				padding_seq = str(seq.seq.upper())
+				if (max_region[peptide]['region_data']['strand'] == '-'):
+					padding_seq = str(seq.reverse_complement().seq.upper())
+		
+		data_rows.append({
+			"Peptide": peptide,
+			"HERV regions": HERV_region,
+			"Tumour reads": total_tumour_reads,
+			"Total reads": total_reads,
+			"ORF": ORF,
+			"TSA": TSA,
+			"Strand": strand,
+			"Validation reading sequence": padding_seq
+		})
+
+	df = pd.DataFrame(data_rows)
+	df.to_csv(f"{outputPath}/Maximal_HERV_Region_Counts_per_Query_Peptide_Across_All_Samples.csv", index=False)
+	
+	return df
 
 
 def output_sample_max_csv(total_result, outputPath):
 	
 	max_region = {}
 	sample_max = {}
+	data_rows = []
 
 	## get the sample ids from first region in first peptide
-	total_result_iter = iter(total_result["1"])
+	total_result_iter = iter(total_result[next(iter(total_result))])
 	next(total_result_iter)
 	first_region = next(total_result_iter)
-	for sample in total_result["1"][first_region]['samples']:
+	for sample in total_result[next(iter(total_result))][first_region]['samples']:
 		max_region[sample] = {}
 		for peptide in total_result:
 			max_region[sample][peptide] = \
@@ -215,29 +238,20 @@ def output_sample_max_csv(total_result, outputPath):
 						sample_max[peptide][sample] = max_region[sample][peptide]['regions'][index]
 					index += 1
 
-	with open(f"{outputPath}/Maximal_HERV_Region_for_Each_Query_Peptide_by_Sample.csv", 'w', newline = '\n') as output_file:
-		fields = [
-			"Peptide"
-		]
 
-		for sample in sample_max["1"]:
-			fields.append(sample)
+	for peptide in total_result:
+		row = {
+				"Peptide": peptide
+			}
+		for sample in sample_max[peptide]:
+			row[sample] = sample_max[peptide][sample]
+		data_rows.append(row)
+	df = pd.DataFrame(data_rows)
+	df.to_csv(f"{outputPath}/Maximal_HERV_Region_for_Each_Query_Peptide_by_Sample.csv", index=False)
 
-		writer =  csv.DictWriter(output_file, fieldnames = fields)
-		writer.writeheader()
+	return df
 
-		for peptide in total_result:
-			data = {
-					"Peptide": peptide
-				}
-			for sample in sample_max[peptide]:
-				data[sample] = sample_max[peptide][sample]
-
-			writer.writerow(data)
-
-	return None
-
-def output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dpi):
+def output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dpi, TSA_ID):
 	
 	i = 0
 
@@ -247,13 +261,10 @@ def output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dp
 	peptides = []
 	peptides_for_plot = []
 
-	peptide_id = 1
-	for peptide in TSA_list:
-		if (str(peptide_id) in tumour_result):
-			peptides.append(peptide_id)
-			peptides_for_plot.append(TSA_list[int(peptide_id)-1])
-		peptide_id+=1
-	
+	for i in range(len(TSA_list)):
+		if (TSA_ID[i] in tumour_result):
+			peptides.append(TSA_ID[i])
+			peptides_for_plot.append(TSA_list[i])
 	## get the total counts
 	counts = []
 	for peptide in peptides:
@@ -261,7 +272,7 @@ def output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dp
 			tumour_counts = tumour_result[str(peptide)]["total_count"]
 			normal_counts = normal_result[str(peptide)]["total_count"]
 		counts.append([tumour_counts, normal_counts])
-
+	
 	cell_height = 1.5
 
 	fig, ax = plt.subplots(figsize=(2 * cell_height + 5, cell_height * len(peptides_for_plot) * 1.5 + 1))
@@ -281,15 +292,16 @@ def output_plot_1(tumour_result, normal_result, tumour, TSA_list, outputPath, dp
 
 	plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 	plt.setp(ax.get_yticklabels(), rotation=45, va='center', ha="right", rotation_mode="anchor")
+	plt.tight_layout()
 
 	plt.savefig(f"{outputPath}/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_for_Each_Peptide.png", dpi=dpi)
 
-	return None
+	return fig
 
 
 
-def output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero):
-	
+def output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero, selectedPeptide, selectedRegion, TSA_ID):
+	figures = []
 	i = 0
 	peptide_len = len(total_result.keys())
 
@@ -308,12 +320,30 @@ def output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero):
 			if (region == 'total_count'):
 				continue
 			else:
-				regions[peptide]["_".join(region.split("_")[0:3])] = region
-				regions_for_plot[peptide].append("_".join(region.split("_")[0:3]))
+				regions[peptide][f"{total_result[peptide][region]['data']['chr']}:{total_result[peptide][region]['data']['start']}-{total_result[peptide][region]['data']['end']}"] = region
+				regions_for_plot[peptide].append(f"{total_result[peptide][region]['data']['chr']}:{total_result[peptide][region]['data']['start']}-{total_result[peptide][region]['data']['end']}")
+	## if user only need specific peptide and region
+	if (selectedPeptide != None):
+		regions_for_plot = {
+			selectedPeptide : regions_for_plot[selectedPeptide]
+		}
+		regions = {
+			selectedPeptide : regions[selectedPeptide]
+		}
+		if (selectedRegion != None):
+			regions_for_plot = {
+				selectedPeptide : selectedRegion
+			}
+			r_list = list(regions[selectedPeptide].keys())
+			for r in r_list:
+				if r not in selectedRegion:
+					regions[selectedPeptide].pop(r)
+
 	
 	## counts : peptide (list) => each region (lists) => group's total count (integer)
 	counts = {}
 	for peptide in regions:
+
 		counts[peptide] = []
 		i = 0
 		for region in regions[peptide]:
@@ -324,23 +354,32 @@ def output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero):
 			for sample in tumour:
 				tumour_count += int(total_result[peptide][regions[peptide][region]]['samples'][f"{sample}T"])
 				normal_count += int(total_result[peptide][regions[peptide][region]]['samples'][f"{sample}N"])
-			
 			## filter zero if withZero == 0
 			if (withZero == 0):
+				print(withZero)
 				if (tumour_count == 0 and normal_count == 0):
-					regions_for_plot[peptide].remove(region)
+					if (region in regions_for_plot[peptide]):
+						regions_for_plot[peptide].remove(region)
 					continue
-
 			counts[peptide].append([])
 			counts[peptide][i].append(tumour_count)
 			counts[peptide][i].append(normal_count)
 			i += 1
+	removeZeroPeptide = []
+	print(2.3)
+
+	for peptide in counts:
+		if len(counts[peptide]) == 0:
+			removeZeroPeptide.append(peptide)
+	for peptide in removeZeroPeptide:
+		counts.pop(peptide)
+		regions_for_plot.pop(peptide)
 
 	for peptide in regions_for_plot:
 		cell_height = 1.5	
 		fig, ax = plt.subplots(figsize=(10 ,len(regions_for_plot[peptide])*cell_height+3))
 		
-		ax.set_title(f"Distribution of Total Counts in Tumour and Normal\nSamples Across HERV Regions of Peptide {peptide}:{TSA_list[int(peptide)-1]}", fontsize=20)
+		ax.set_title(f"Distribution of Total Counts in Tumour and Normal\nSamples Across HERV Regions of Peptide : {TSA_list[TSA_ID.index(peptide)]}", fontsize=20)
 		ax.set_xlabel('Sample Classification', fontsize=20)
 		ax.set_ylabel('Regions', fontsize=20)
 
@@ -356,15 +395,18 @@ def output_plot_2(total_result, tumour, TSA_list, outputPath, dpi, withZero):
 
 		plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 		plt.setp(ax.get_yticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+		plt.tight_layout()
 
 		plt.savefig(f"{outputPath}/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_Across_HERV_Regions_of_Peptide_{peptide}.png", dpi=dpi)
 
-	return None
+		figures.append(fig)
+
+	return figures
 
 
 
-def output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero):
-	
+def output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero, selectedPeptide, selectedRegion, TSA_ID):
+	figures = []
 	i = 0
 	peptide_len = len(total_result.keys())
 
@@ -384,13 +426,31 @@ def output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero):
 			if (region == 'total_count'):
 				continue
 			else:
-				regions[peptide]["_".join(region.split("_")[0:3])] = region
-				regions_for_plot[peptide].append("_".join(region.split("_")[0:3]))
+				regions[peptide][f"{total_result[peptide][region]['data']['chr']}:{total_result[peptide][region]['data']['start']}-{total_result[peptide][region]['data']['end']}"] = region
+				regions_for_plot[peptide].append(f"{total_result[peptide][region]['data']['chr']}:{total_result[peptide][region]['data']['start']}-{total_result[peptide][region]['data']['end']}")
+	
 	
 	for sample in tumour:
 		samples.append([f"{sample}T", f"{sample}N"])
 		samples_for_plot.append(f"{sample}T")
 		samples_for_plot.append(f"{sample}N")
+
+	## if user only need specific region and peptide
+	if (selectedPeptide != None):
+		regions_for_plot = {
+			selectedPeptide : regions_for_plot[selectedPeptide]
+		}
+		regions = {
+			selectedPeptide : regions[selectedPeptide]
+		}
+		if (selectedRegion != None):
+			regions_for_plot = {
+				selectedPeptide : selectedRegion
+			}
+			r_list = list(regions[selectedPeptide].keys())
+			for r in r_list:
+				if r not in selectedRegion:
+					regions[selectedPeptide].pop(r)
 
 	## counts : peptide (list) => each region (lists) => sample's count (integer)
 	counts = {}
@@ -408,18 +468,27 @@ def output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero):
 			## remove zero if withZero == 0
 			if (withZero == 0):
 				if (all(item == 0 for item in counts[peptide][i])):
-					regions_for_plot[peptide].remove(region)
-					counts[peptide].remove(counts[peptide][i])
+					if (region in regions_for_plot[peptide]):
+						regions_for_plot[peptide].remove(region)
+						counts[peptide].remove(counts[peptide][i])
 					continue
 			i += 1
 
+	removeZeroPeptide = []
+	for peptide in counts:
+		if len(counts[peptide]) == 0:
+			removeZeroPeptide.append(peptide)
+	for peptide in removeZeroPeptide:
+		counts.pop(peptide)
+		regions_for_plot.pop(peptide)
 
 	for peptide in regions_for_plot:
+		cell_height = 1.5
 
-		fig, ax = plt.subplots(figsize=(len(samples_for_plot) * 0.75 + 2.5, len(regions_for_plot[peptide]) * 0.75+3))
-		ax.set_title(f"Distribution of Total Counts Across HERV Regions \nin Each Sample for Peptide {peptide}:{TSA_list[int(peptide)-1]}", fontsize=20)
-		ax.set_xlabel('Samples', fontsize=20)
-		ax.set_ylabel('Regions', fontsize=20)
+		fig, ax = plt.subplots(figsize=(len(samples_for_plot) * 0.75 + 8, len(regions_for_plot[peptide]) * 0.75+8), dpi=dpi)
+		ax.set_title(f"Distribution of Total Counts Across HERV Regions \nin Each Sample for Peptide :{TSA_list[TSA_ID.index(peptide)]}", fontsize=30)
+		ax.set_xlabel('Samples', fontsize=18)
+		ax.set_ylabel('Regions', fontsize=18)
 
 		im = ax.imshow(counts[peptide], cmap='Blues')
 
@@ -431,48 +500,60 @@ def output_plot_3(total_result, tumour, TSA_list, outputPath, dpi, withZero):
 		ax.set_yticks(np.arange(len(regions_for_plot[peptide])), labels=regions_for_plot[peptide])
 		ax.set_xticks(np.arange(len(samples_for_plot)), labels=samples_for_plot)
 
-		plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
-		plt.setp(ax.get_yticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+		plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor", fontsize=30)
+		plt.setp(ax.get_yticklabels(), rotation=45, ha="right", rotation_mode="anchor", fontsize=30)
+		plt.tight_layout()
 
-		plt.savefig(f"{outputPath}/Distribution_of_Total_Counts_Across_HERV_Regions_in_Each_Sample_for_Peptide_{peptide}.png", dpi=dpi)
+		plt.savefig(f"{outputPath}/Distribution_of_Total_Counts_Across_HERV_Regions_in_Each_Sample_for_Peptide_{peptide}.png")
+		figures.append(fig)
 
-	return None
+	return figures
 
 
 def getTSAlist(inputPeptide):
 	## get the input peptide sequence
 	with open(inputPeptide, 'r') as file:
 		TSA_list = []
+		TSA_ID = []
+		i = 1
 		for line in file:
 			if ">" in line:
+				stripped_line = line.strip()
+				TSAdata = stripped_line.split(">")[1]
+				if len(TSAdata) == 0:
+					ID = f"Query_{i}"
+					i += 1
+				else:
+					ID = TSAdata.split(" ")[0].strip()
+				TSA_ID.append(ID)
 				continue
 			line = line.replace("\n","")
 			TSA_list.append(line)
-	return TSA_list
+	return TSA_list, TSA_ID
 
 
-def extractResult(sampleResultDir, TSA_list):
+def extractResult(sampleResultDir, TSA_list, TSA_ID):
+	print(sampleResultDir)
 
 	with open(sampleResultDir, 'r') as file:
 		result_list = file.readlines()
 
 	result_list = [line.strip().split(',') for line in result_list]
 	sample_result_dir = []
+	
 
 	for result in result_list:
 		if (not "summary" in result[2]):
 			sample_result_dir.append(result[2])
-
 	sample_result_dir.pop(0)
 
 	result_summary = {}
 	HERV_peptides = []
-	i = 1
+	i = 0
 	
 	for peptide in TSA_list:
-		result_summary[str(i)] = {"total_count": 0}
+		result_summary[TSA_ID[i]] = {"total_count": 0}
 		i += 1
-	
 	with open(sample_result_dir[0], 'r') as file:
 		## skip the first two lines
 		next(file)
@@ -480,7 +561,8 @@ def extractResult(sampleResultDir, TSA_list):
 
 		for line in file:
 			fields = line.strip().split('\t')
-			peptide_seq = fields[0].split('_')[1]
+			peptide_seq_split = fields[0].split('_')[1:]
+			peptide_seq = "_".join(peptide_seq_split[:-5])
 			region = fields[0]
 			sample = sample_result_dir[0].split("/")[-1].split("_")[0]
 			result_summary[peptide_seq][region] = \
@@ -503,7 +585,6 @@ def extractResult(sampleResultDir, TSA_list):
 
 			if (peptide_seq not in HERV_peptides):
 				HERV_peptides.append(peptide_seq)
-			
 	sample_result_dir.pop(0)
 
 	for result_dir in sample_result_dir:
@@ -514,7 +595,8 @@ def extractResult(sampleResultDir, TSA_list):
 
 			for line in file:
 				fields = line.strip().split('\t')
-				peptide_seq = fields[0].split('_')[1]
+				peptide_seq_split = fields[0].split('_')[1:]
+				peptide_seq = "_".join(peptide_seq_split[:-5])
 				region = fields[0]
 				sample = result_dir.split("/")[-1].split("_")[0]
 				result_summary[peptide_seq][region]["data"]["total_count_region"] += int(fields[6])

@@ -11,10 +11,12 @@
 	- [Input files format](#input-files-format)
 	- [Separated Subcommands](#separated-subcommands)
 	- [Single Command Workflow](#single-command-workflow)
+	- [Streamlit Interface](#streamlit-interface)
 - [Example final outputs](#example-final-outputs)
 
 ## Description
-HERVOminer is a tool that capable of determining whether the query peptides originated from Human Endogenous retroviruses (HERVs) regions, quantify their expression and visualize the result.
+HERVOminer is a user-friendly toolkit that offers both an interactive web interface and a command-line interface. The website can be found in : https://... 
+The tool identifies the HERV origins of query peptides, quantifies their expression and visualizes the results.
 
 ## Installation
 
@@ -49,9 +51,10 @@ cd HERVOminer
 Please use the following commands to install the dependencies:
 
 ```bash
+conda config --add channels conda-forge
 conda install bioconda::subread=2.0.6
 conda install bioconda::bedtools=2.31.0
-conda install bioconda::blast= 2.15.0
+conda install bioconda::blast=2.16.0
 pip install -r requirements.txt
 ```
 
@@ -74,13 +77,13 @@ chmod +x ./src/HERVOminer.py
 
 ## Implementation
 
-HERVOminer is designed to determine whether the query peptides are derived from the HERV regions and quantify the corresponding sequences. HERVOminer processes 2 databases and 2 user inputs in 4 steps and generates 3 tables and 3 graphs of the analytical results. The 4 steps can be executed individually using 4 subcommands, or can be performed all at once with a single command.
+HERVOminer is a toolkit designed for analyzing MHC-I-presented peptides (MPPs). HERVOminer processes 2 databases and 2 user inputs to generate 3 tables and 3 plots for the analytical results. The command line can be executed individually using 4 subcommands, or can be performed all at once with a single command. 
 
 ### Input files format
-1. RNA-seq CSV
+1. post-processed RNA BAM (Binary Alignment/Map) files
 - Description : \
 A CSV file summarizing directories of post-processed alignment files for the samples.
-Each tumor sample need to have its corresponding normal sample. The sample id fields of the tumor and corresponding normal sample have to be same and the sample type field should state whether the sample is tumor (T) or normal (N) sample. The directory has to be absolute directory.
+Each tumor sample need to have its matched normal sample. The sample id fields of the tumor and corresponding normal sample have to be same and the sample type field should state whether the sample is tumor (T) or normal (N) sample. The directory has to be absolute directory. \
 - Format : \
 3 fields : sample id, sample type (T / N), directory
 - Example input format : 
@@ -98,68 +101,69 @@ Each tumor sample need to have its corresponding normal sample. The sample id fi
 2. query peptide 
 - Description : \
 The absolute directory of the query peptides FASTA file.
-- Example input format : \
-/Users/jade-f-t/data/input_peptide.fasta
 
 ### Separated Subcommands
 
-1. Protein BLAST Similarity Analysis (BLAST)
-- Description : \
-Find regions of similarity between query peptides and the open reading frames of HERV regions. 
-- Usage :
-```bash
-./src/HERVOminer.py blastORF \
--p <path to the input peptide file> \
--o <path to the output file>
-```
-- Output : blastp_output.txt
+1. STEP 1 : Protein BLAST Similarity Analysis (BLAST) 
+	- **Description:** \
+	8 to 11 amino acid length target peptides are aligned to the local ORF database of HERV regions using Protein BLAST to calculate regions of similarity.
+	- **Usage:** 
+	```bash 
+	./src/HERVOminer.py blastORF \
+	-p <path to the input peptide file> \
+	-o <path to the output file>
+	``` 
+	- **Output:** blastp_output.txt 
 
-2. BLAST results summarisation, Annotation file generation
-- Description : \
-Filter BLAST results of protein BLAST , and summarize their information.Then, generate the corresponding annotation file for the following quantification process.
-- Usage :
-```bash
-./src/HERVOminer.py summarizeAnnotate \
--i <path to the input blastp output file get from Step 1> \
--o <path to the output file>
-```
-- Output : output_dict.json, quantification.gtf
 
-3. Quantification (featureCounts)
-- Description : \
-Use FeatureCountsto quantify each BLAST result remaining after filtering.
-- Usage :
-```bash
-./src/HERVOminer.py quantification \
--i <path to the input csv file with all of the bam file path> \
--a <path to the annotation file created by Step 2> \
--o <path to the output file> \
--t <no of threads to use for one sample> \
--n <number of sample to be analyzed in parallel computing>
-```
-- Output : output files of featureCounts, csv files for tumor and normal featureCounts   
-output directories (resultDirectories_T.csv and resultDirectories_N.csv)
+2. STEP 2 : BLAST results selection, Annotation file generation
+	- **Description:**
+	Selection is based on identity and alignment length, obtaining the positions of target peptides on all candidate HERV ORFs. HERV fragments that are not 100% matched or have different lengths with the query peptides are filtered. The output annotation file is in GTF format and contains the detailed annotation of genetic features of the corresponding HERV region of the BLAST results.
+	- **Usage:** 
+	```bash
+	./src/HERVOminer.py summarizeAnnotate \
+	-i <path to the input blastp output file get from Step 1> \
+	-o <path to the output file>
+	``` 
+	- **Output:** output_dict.json, quantification.gtf 
 
-4. Data summarisation and visualization
-- Description : \
-Generate three tables and three groups of graphs from the quantification results.
-- Usage :
-```bash
-./src/HERVOminer.py outputResult \
--p <path to the input peptide file> \ 
--i <path to the input csv file with all of the bam file path> \ 
--T <path to the resultDirectories_T.csv file> \ 
--N <path to the resultDirectories_N.csv file> \ 
--z <include region with zero count or not, 1 : with zero, 0: without zero> \ 
--o <path to the output file>
--d <set the dpi of the figures>
-```
-- Output : 3 Tables , 3 Figures
+3. STEP 3 : Quantification of candidate HERV fragments (featureCounts)
+	- **Description :** \
+	RNA sequencing BAM files from the samples and genomic positions recorded in the GTF are integrated to quantify expression levels using FeatureCounts
+	- **Usage :**
+	```bash
+	./src/HERVOminer.py quantification \
+	-i <path to the input csv file with all of the bam file path> \
+	-a <path to the annotation file created by Step 2> \
+	-o <path to the output file> \
+	-t <no of threads to use for one sample> \
+	-n <number of sample to be analyzed in parallel computing>
+	```
+	- **Output :** output files of featureCounts, csv files for tumor and normal featureCounts   
+	output directories (resultDirectories_T.csv and resultDirectories_N.csv)
+
+4. STEP 4 : Annotation of DNA sequences for experimental validation and visualization of quantification results for candidate HERV fragments
+	- **Description :** \
+	3 tables and 3 plots which summarizing the results will be generated directly on the page. Please download them directly by clicking the download button beside them if needed.
+	- **Usage :**
+	```bash
+	./src/HERVOminer.py outputResult \
+	-p <path to the input peptide file> \ 
+	-i <path to the input csv file with all of the bam file path> \ 
+	-T <path to the resultDirectories_T.csv file> \ 
+	-N <path to the resultDirectories_N.csv file> \ 
+	-z <include region with zero count or not, 1 : with zero, 0: without zero, optional argument, default value : 0> \ 
+	-o <path to the output file, optional argument, default value : current directory>
+	-d <set the dpi of the figures, optional argument, default value : 100>
+	-sr <selected regions to appear in the plots in the form <region_id>,<region_id>,... eg. 2_1_3166,10_1_3514,15_1_2630, optional argument, defualt value : None>
+	-sp <selected peptide to generate respective plots, please input the id of the peptide (shown on the table 'Maximal HERV Region Counts per Query Peptide Across All Sample'), optional argument, defualt value : None>
+	```
+	- **Output :** 3 Tables , 3 Figures
 
 ### Single Command Workflow
-- Description : \
+- **Description :** \
 This command can finish all of the above steps all at once. The outputs are same as the above.
-- Usage :
+- **Usage :**
 ```bash
 ./src/HERVOminer.py HERVOminer \
 -p <path to the input peptide file> \ 
@@ -169,42 +173,45 @@ This command can finish all of the above steps all at once. The outputs are same
 -z <include region with zero count or not, 1 : with zero, 0: without zero> \ 
 -o <path to the output file>
 -d <set the dpi of the figures>
+-sr <selected regions to appear in the plots in the form <region_id>,<region_id>,... eg. 2_1_3166,10_1_3514,15_1_2630, optional argument, defualt value : None>
+-sp <selected peptide to generate respective plots, please input the id of the peptide (shown on the table 'Maximal HERV Region Counts per Query Peptide Across All Sample'), optional argument, defualt value : None>
 ```
 
 ## Example final outputs
 
 ### Figure 1 : Distribution of Total Counts in Tumor and Normal Samples for Each Peptide
-- Description : \
+- **Description :** \
 a heatmap comparing total counts of tumor and normal samples in each peptide
 <img src="assets/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_for_Each_Peptide.png" width="600" />
 
 ### Figure 2 : Distribution of Total Counts in Tumor and Normal Samples Across HERV Regions of Each Query Peptide
-- Description : \
+- **Description :** \
 heatmaps for each peptide which shows distribution of total counts of corresponding HERV region sequences.  \
-![Animation of Plot 2](assets/Distribution_of_Total_Counts_in_Tumor_and_Normal_Samples_Across_HERV_Regions_of_Each_Query_Peptide.gif)
+![Animation of Plot 2](assets/Distribution_of_Total_Counts_in_Tumour_and_Normal_Samples_Across_HERV_Regions.png)
 
 ### Figure 3 : Distribution of Total Counts Across HERV Regions in Each Sample for Peptide
-- Description : \
+- **Description :** \
 heatmaps for each peptide, which shows the distribution of total counts of each HERV region within an individual sample. \
-![Animation of Plot 3](assets/Distribution_of_Total_Counts_Across_HERV_Regions_in_Each_Sample_for_Peptide.gif)
+![Animation of Plot 3](assets/Distribution_of_Total_Counts_Across_HERV_Regions_in_Each_Sample.png)
 
 ### Table 1 : Quantification Summary Across All Samples
-- Description : \
-A comprehensive summary of all quantification results. \
-Fields : \
-Sample - Sample Id \
-HERV regions - location of the region (format : chr{}:{start position}-{end position})\
-Tumor reads - the total read of the HERV region in all of the tumour samples\
-Total reads - the total read of the HERV region in all of the samples\
-Sample total reads - the total read of the HERV region in the specific sample\
-ORF - the ID of the open reading frame of the HERV region\
-TSA - the amino acid sequence of the TSA\
-Strand - "+" : forward strand, "-" : reverse strand\
-Padding sequence - DNA sequence of the ORF with additional sequence ~60 nucleotides before and after the original sequence
+- **Description :** \
+A comprehensive summary of all quantification results. 
+- **Fields :**  
+	- *Sample* - Sample Id 
+	- *HERV regions* - location of the region 
+	(format : chr{}:{start position}-{end position})
+	- *Tumor reads* - the total read of the HERV region in all of the tumour samples
+	- *Total reads* - the total read of the HERV region in all of the samples
+	- *Sample total reads* - the total read of the HERV region in the specific sample
+	- *ORF* - the ID of the open reading frame of the HERV region
+	- *TSA* - the amino acid sequence of the TSA
+	- *Strand* - "+" : forward strand, "-" : reverse strand\
+	- *Validation reading sequence* - DNA sequence of the ORF with additional sequence ~60 nucleotides before and after the original sequence
 
 
 
-| Sample | HERV regions           | Tumour reads | Total reads | Sample total reads | ORF                              | TSA       | Strand | Padding sequence                                                                                                                                                  |
+| Sample | HERV regions           | Tumour reads | Total reads | Sample total reads | ORF                              | TSA       | Strand | Validation reading sequence                                                                                                                                                  |
 |--------|------------------------|--------------|-------------|--------------------|----------------------------------|-----------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 11T    | chr14:31742452-31742478 | 1            | 1           | 1                  | 2_1_4099_chr14_31741013-31750035_3_ORF19 | VILPPQPPK | +      | TTTAGTAGAGACAGGGTTTCTCCATGTTGGTCAGGCTGGTCTTGAACTCCTGACCTCAGGTGATCCTCCCACCTCAGCCTCCCAAAGTGATGGGATTACAGGCGTGAGCCACTGTGCCTGGCTGTTTTTTTTTTTTTTCCTCCTAG |
 | 14T    | chr2:130726841-130726867 | 1            | 1           | 1                  | 4_1_679_chr2_130719470-130727258_5_ORF74  | VILPPQPPK | +      | TACAGTGGAGTACACTGGTACAATTATAGCTCACTGCAGACTCAAACTCCTGGGCTAAAGTTATCCTCCCACCTCAGCCTCCCAAGTAGCTGGGATCATCACAGGCATGCACCACCACGCCTGGCTAGGTTTTTTGTTTTTTATTT |
@@ -213,26 +220,28 @@ Padding sequence - DNA sequence of the ORF with additional sequence ~60 nucleoti
 | ... | ... | ... | ... | ... | ... | ... | ... | ... |
 
 ### Table 2 : Maximal HERV Region Counts per Query Peptide Across All Samples
-- Description : \
-Identifies the HERV region with the highest total counts for each query peptide \
-Fields : \
-Peptide - Peptide Id \
-HERV regions - location of the region (format : chr{}:{start position}-{end position})\
-Tumor reads - the total read of the HERV region in all of the tumour samples\
-Total reads - the total read of the HERV region in all of the samples\
-ORF - the ID of the open reading frame of the HERV region\
-TSA - the amino acid sequence of the TSA\
-Strand - "+" : forward strand, "-" : reverse strand\
-Padding sequence - DNA sequence of the ORF with additional sequence ~60 nucleotides before and after the original sequence
 
-| Peptide | HERV regions            | Tumour reads | Total reads | ORF                                   | TSA       | Strand | Padding sequence                                                                                                                                 |
+- **Description :** \
+Identifies the HERV region with the highest total counts for each query peptide \
+- **Fields :** 
+	- *Peptide* - Peptide Id 
+	- *HERV regions* - location of the region 
+	(format : chr{}:{start position}-{end position})
+	- *Tumor reads* - the total read of the HERV region in all of the tumour samples
+	- *Total reads* - the total read of the HERV region in all of the samples
+	- *ORF* - the ID of the open reading frame of the HERV region
+	- *TSA* - the amino acid sequence of the TSA
+	- *Strand* - "+" : forward strand, "-" : reverse strand
+	- *Validation reading sequence* - DNA sequence of the ORF with additional sequence ~60 nucleotides before and after the original sequence
+
+| Peptide | HERV regions            | Tumour reads | Total reads | ORF                                   | TSA       | Strand | Validation reading sequence                                                                                                                                 |
 |---------|-------------------------|--------------|-------------|---------------------------------------|-----------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------|
 | 1       | chr11:70055837-70055863 | 83           | 151         | 9_1_3537_chr11_70055744-70066106_2_ORF96 | VILPPQPPK | -      | TTTTTTTAGAGATGAGGTTTCCCTATGTTGGCGAGGCTGGCCTCAAACTCCTGGGTTCAAGTAATCCTCCCACCTCAGCCTCCCAAAGTGCAGGGATTACAGATGAGAGCCACTGCACCTGGCCTAGCGCCCAGTTTTAATTGAGG |
 | 2       | chr8:103996760-103996786 | 8            | 8           | 21_2_2916_chr8_103991601-104003946_6_ORF54  | AVLLPQPPK | +      | CAAGCTGGAGTGCAGTGGCACAATCTCGGGTCACTGCAACCTCCGCCTCCCAGATTCAAGCAGTTCTCCTGCCTCAGCCTCCCAAATAGCTGGGATTACAGGCACCTGCCACCATGTCTGGCTAAATTTTTGTATTTTTTTAGTAG |
 | 3       | chr1:155663642-155663668 | 9            | 14          | 28_3_6073_chr1_155661620-155669313_3_ORF51 | GILLPQPPK | -      | ACAGGCTGGAGTGCAATGGCGCAATCTCAGCTCACTGCAACCTCCGCCCCCCAAGTTCAAGGGATTCTCCTGCCTCAGCCTCCCAAGTAGCTGCGATTACAGGCATGTGCCACCACACCCTGCTAATTTTGTATTTTTAGTAGAGA |
 
 ### Table 3 : Maximal HERV Region for Each Query Peptide by Sample
-- Description : \
+- **Description :** \
 Shows the HERV region with the highest count in the individual sample for each peptide
 
 

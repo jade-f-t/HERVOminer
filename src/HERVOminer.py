@@ -20,14 +20,11 @@ if __name__ == "__main__":
 	elif args.subcmd == 'summarizeAnnotate':
 		returnValue = func2_summarize_annotation(args.blastpOutput, args.outputPath)
 
-	# elif args.subcmd == 'createGTF':
-	# 	returnValue = func3_createGTF(args.HERVregion, args.outputPath)
-
 	elif args.subcmd == 'quantification':
 		returnValue = func3_quantification(args.inputCsvFile, args.annotationFile, args.outputPath,args.threadNo, args.parallelTask)
 
 	elif args.subcmd == 'outputResult':
-		returnValue = func4_outputResult(args.inputPeptide, args.inputCsvFile, args.tumourResultDirectories, args.normalResultDirectories, args.outputPath, args.withZero, args.dpi)
+		returnValue = func4_outputResult(args.inputPeptide, args.inputCsvFile, args.tumourResultDirectories, args.normalResultDirectories, args.outputPath, args.withZero, args.dpi, args.selectedPeptide, args.selectedRegion)
 
 	elif args.subcmd == 'HERVOminer':
 		blastpOutput = f"{args.outputPath}/blastp_output.txt"
@@ -37,8 +34,7 @@ if __name__ == "__main__":
 		func1_blastORF(args.inputPeptide, args.outputPath)
 		func2_summarize_annotation(blastpOutput, args.outputPath)
 		func3_quantification(args.inputCsvFile, annotationFile, args.outputPath,args.threadNo, args.parallelTask)
-		func4_outputResult(args.inputPeptide, args.inputCsvFile, tumourResultDirectories, normalResultDirectories, args.outputPath, args.withZero, args.dpi)
-
+		func4_outputResult(args.inputPeptide, args.inputCsvFile, args.tumourResultDirectories, args.normalResultDirectories, args.outputPath, args.withZero, args.dpi, args.selectedPeptide, args.selectedRegion)
 		returnValue = None
 
 	sys.exit(returnValue)
