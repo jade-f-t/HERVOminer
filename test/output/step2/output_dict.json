@@ -1,0 +1,562 @@
+{
+    "1": {
+        "input_ID": "1",
+        "ORF_ID": "4429_chr17_20975896-20983524_5_ORF8",
+        "ORF": "VILPPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "4429_chr17:20975896-20983524",
+            "ORF": "VILPPQPPK",
+            "len_alignment": "9",
+            "strand": "-",
+            "HERV_region_location": [
+                20976744,
+                20976770
+            ]
+        },
+        "location": [
+            20976744,
+            20976770
+        ]
+    },
+    "2": {
+        "input_ID": "1",
+        "ORF_ID": "4099_chr14_31741013-31750035_3_ORF19",
+        "ORF": "VILPPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "4099_chr14:31741013-31750035",
+            "ORF": "PQVILPPQPPKVMGLQA",
+            "len_alignment": "17",
+            "strand": "+",
+            "HERV_region_location": [
+                31742446,
+                31742496
+            ]
+        },
+        "location": [
+            31742452,
+            31742478
+        ]
+    },
+    "3": {
+        "input_ID": "1",
+        "ORF_ID": "2982_chr8_146084300-146094055_5_ORF34",
+        "ORF": "VILPPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "2982_chr8:146084300-146094055",
+            "ORF": "PQVILPPQPPKMLGLQA",
+            "len_alignment": "17",
+            "strand": "-",
+            "HERV_region_location": [
+                146087998,
+                146088048
+            ]
+        },
+        "location": [
+            146088004,
+            146088030
+        ]
+    },
+    "4": {
+        "input_ID": "1",
+        "ORF_ID": "679_chr2_130719470-130727258_5_ORF74",
+        "ORF": "VILPPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "679_chr2:130719470-130727258",
+            "ORF": "LTADSNSWAKVILPPQPPK",
+            "len_alignment": "19",
+            "strand": "-",
+            "HERV_region_location": [
+                130726811,
+                130726867
+            ]
+        },
+        "location": [
+            130726841,
+            130726867
+        ]
+    },
+    "5": {
+        "input_ID": "1",
+        "ORF_ID": "3222_chr10_35691988-35699048_5_ORF74",
+        "ORF": "VILPPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "3222_chr10:35691988-35699048",
+            "ORF": "RQGLAMLPRLILNFWAPVILPPQPPKVLGL",
+            "len_alignment": "30",
+            "strand": "-",
+            "HERV_region_location": [
+                35698856,
+                35698945
+            ]
+        },
+        "location": [
+            35698907,
+            35698933
+        ]
+    },
+    "6": {
+        "input_ID": "1",
+        "ORF_ID": "6097_chr1_171194090-171202612_1_ORF13",
+        "ORF": "VILPPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "6097_chr1:171194090-171202612",
+            "ORF": "GLAMLPRLVLNAWSQVILPPQPPKVLGLCA",
+            "len_alignment": "30",
+            "strand": "-",
+            "HERV_region_location": [
+                171201595,
+                171201506
+            ]
+        },
+        "location": [
+            171201550,
+            171201524
+        ]
+    },
+    "7": {
+        "input_ID": "1",
+        "ORF_ID": "2030_chr5_159543071-159558145_2_ORF84",
+        "ORF": "VILPPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "2030_chr5:159543071-159558145",
+            "ORF": "FFVFLVEMGFYHVGQAGLRLLTSSDLLTSASQNAGITGMSHCTRSVFFLFFLSLSXXXXXXXXXETVSLCHPGWSAVARSQLTATSTSQGQVILPPQPPK",
+            "len_alignment": "100",
+            "strand": "+",
+            "HERV_region_location": [
+                159551997,
+                159552296
+            ]
+        },
+        "location": [
+            159552270,
+            159552296
+        ]
+    },
+    "8": {
+        "input_ID": "1",
+        "ORF_ID": "1477_chr4_80469047-80481757_6_ORF58",
+        "ORF": "VILPPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "1477_chr4:80469047-80481757",
+            "ORF": "TQAGRQCHEHEYYSLNLPPITASQVSGTTGECHHAWLVCFFSFFLKRQGPTLLPRLLLNFWAQVILPPQPPKVLGPNSFPCLMNHSRAFFSFTV",
+            "len_alignment": "94",
+            "strand": "-",
+            "HERV_region_location": [
+                80473947,
+                80474228
+            ]
+        },
+        "location": [
+            80474136,
+            80474162
+        ]
+    },
+    "9": {
+        "input_ID": "1",
+        "ORF_ID": "3537_chr11_70055744-70066106_2_ORF96",
+        "ORF": "VILPPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "3537_chr11:70055744-70066106",
+            "ORF": "GFPMLARLASNSWVQVILPPQPPKVQGLQMRATAPGLAPSFN",
+            "len_alignment": "42",
+            "strand": "-",
+            "HERV_region_location": [
+                70055908,
+                70055783
+            ]
+        },
+        "location": [
+            70055863,
+            70055837
+        ]
+    },
+    "10": {
+        "input_ID": "1",
+        "ORF_ID": "4787_chr19_57006131-57013072_3_ORF33",
+        "ORF": "VILPPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "4787_chr19:57006131-57013072",
+            "ORF": "PQVILPPQPPKVLRLQAHTRFVYLILWFLDSCVGECFAYTALSQKRPHKTIDLILYIQLKSHVY",
+            "len_alignment": "64",
+            "strand": "+",
+            "HERV_region_location": [
+                57009163,
+                57009354
+            ]
+        },
+        "location": [
+            57009169,
+            57009195
+        ]
+    },
+    "11": {
+        "input_ID": "1",
+        "ORF_ID": "2049_chr5_175418933-175433070_6_ORF19",
+        "ORF": "VILPPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "2049_chr5:175418933-175433070",
+            "ORF": "GLSMLARLVSNSWTQVILPPQPPKVLGLLPCPALMFFLTMCLGHVSY",
+            "len_alignment": "47",
+            "strand": "-",
+            "HERV_region_location": [
+                175420793,
+                175420933
+            ]
+        },
+        "location": [
+            175420838,
+            175420864
+        ]
+    },
+    "12": {
+        "input_ID": "1",
+        "ORF_ID": "5614_chrX_100434150-100444863_6_ORF34",
+        "ORF": "VILPPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "5614_chrX:100434150-100444863",
+            "ORF": "GCCSRPSSXXXXXXXXXDGVSLCAVMQSRLTATSASQVQVILPPQPPK",
+            "len_alignment": "48",
+            "strand": "-",
+            "HERV_region_location": [
+                100437212,
+                100437355
+            ]
+        },
+        "location": [
+            100437329,
+            100437355
+        ]
+    },
+    "13": {
+        "input_ID": "1",
+        "ORF_ID": "2289_chr6_111452131-111463051_3_ORF92",
+        "ORF": "VILPPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "2289_chr6:111452131-111463051",
+            "ORF": "ERVFLCHQGWSAVMQSWFTATSTSRAPVILPPQPPKWLGLQTCATKSS",
+            "len_alignment": "48",
+            "strand": "+",
+            "HERV_region_location": [
+                111462009,
+                111462152
+            ]
+        },
+        "location": [
+            111462090,
+            111462116
+        ]
+    },
+    "14": {
+        "input_ID": "1",
+        "ORF_ID": "4843_chr20_43298870-43307846_4_ORF11",
+        "ORF": "VILPPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "4843_chr20:43298870-43307846",
+            "ORF": "KINKYXXXXXXXRWSPFCCAGWRVVARPWLTATSASRVQVILPPQPPK",
+            "len_alignment": "48",
+            "strand": "+",
+            "HERV_region_location": [
+                43306858,
+                43306715
+            ]
+        },
+        "location": [
+            43306741,
+            43306715
+        ]
+    },
+    "15": {
+        "input_ID": "2",
+        "ORF_ID": "4428_chr17_19782988-19799365_3_ORF152",
+        "ORF": "AVLLPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "4428_chr17:19782988-19799365",
+            "ORF": "VQAVLLPQPPK",
+            "len_alignment": "11",
+            "strand": "-",
+            "HERV_region_location": [
+                19784684,
+                19784652
+            ]
+        },
+        "location": [
+            19784678,
+            19784652
+        ]
+    },
+    "16": {
+        "input_ID": "2",
+        "ORF_ID": "3294_chr10_76535406-76544894_6_ORF20",
+        "ORF": "AVLLPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "3294_chr10:76535406-76544894",
+            "ORF": "VEAVLLPQPPK",
+            "len_alignment": "11",
+            "strand": "+",
+            "HERV_region_location": [
+                76543150,
+                76543118
+            ]
+        },
+        "location": [
+            76543144,
+            76543118
+        ]
+    },
+    "17": {
+        "input_ID": "2",
+        "ORF_ID": "4471_chr17_52363860-52372421_5_ORF70",
+        "ORF": "AVLLPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "4471_chr17:52363860-52372421",
+            "ORF": "SWLTASSASRLHAVLLPQPPK",
+            "len_alignment": "21",
+            "strand": "+",
+            "HERV_region_location": [
+                52366863,
+                52366801
+            ]
+        },
+        "location": [
+            52366827,
+            52366801
+        ]
+    },
+    "18": {
+        "input_ID": "2",
+        "ORF_ID": "1891_chr5_81249173-81256423_5_ORF2",
+        "ORF": "AVLLPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "1891_chr5:81249173-81256423",
+            "ORF": "VLLCRPGWSAVAQSRLTATSASQVQAVLLPQPPK",
+            "len_alignment": "34",
+            "strand": "+",
+            "HERV_region_location": [
+                81256346,
+                81256245
+            ]
+        },
+        "location": [
+            81256271,
+            81256245
+        ]
+    },
+    "19": {
+        "input_ID": "2",
+        "ORF_ID": "5550_chrX_83950550-83964715_5_ORF47",
+        "ORF": "AVLLPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "5550_chrX:83950550-83964715",
+            "ORF": "VFVLILSLPFLPPPNRPQCVMFFSLCSCVLIVQLQLMSENMQCLVCCSSVTLLRMMVSSFIPVPAKDVNSFXXXXXXDGVFLCRPGWSAVARCRLTASPASQVHAVLLPQPPKYLGL",
+            "len_alignment": "117",
+            "strand": "-",
+            "HERV_region_location": [
+                83954419,
+                83954769
+            ]
+        },
+        "location": [
+            83954731,
+            83954757
+        ]
+    },
+    "20": {
+        "input_ID": "2",
+        "ORF_ID": "2589_chr7_106733939-106749271_6_ORF114",
+        "ORF": "AVLLPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "2589_chr7:106733939-106749271",
+            "ORF": "AQTWESKSGRIQPFSPQCFFXXXXFSFFETESRTFGPGWSAVARSRLTATSASWAQAVLLPQPPK",
+            "len_alignment": "65",
+            "strand": "-",
+            "HERV_region_location": [
+                106744410,
+                106744604
+            ]
+        },
+        "location": [
+            106744578,
+            106744604
+        ]
+    },
+    "21": {
+        "input_ID": "2",
+        "ORF_ID": "2916_chr8_103991601-104003946_6_ORF54",
+        "ORF": "AVLLPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "2916_chr8:103991601-104003946",
+            "ORF": "IAALXXXXXXXXXXXFCFILRRSLCRSSWSAVAQSRVTATSASQIQAVLLPQPPK",
+            "len_alignment": "55",
+            "strand": "-",
+            "HERV_region_location": [
+                103996622,
+                103996786
+            ]
+        },
+        "location": [
+            103996760,
+            103996786
+        ]
+    },
+    "22": {
+        "input_ID": "2",
+        "ORF_ID": "1406_chr4_54349197-54360381_1_ORF120",
+        "ORF": "AVLLPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "1406_chr4:54349197-54360381",
+            "ORF": "MAYTSEGKCLFVYFLRQSLALSPGWSAVVRSWLTETSASRVQAVLLPQPPK",
+            "len_alignment": "51",
+            "strand": "+",
+            "HERV_region_location": [
+                54359112,
+                54359264
+            ]
+        },
+        "location": [
+            54359238,
+            54359264
+        ]
+    },
+    "23": {
+        "input_ID": "2",
+        "ORF_ID": "4649_chr19_20952100-20963415_4_ORF97",
+        "ORF": "AVLLPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "4649_chr19:20952100-20963415",
+            "ORF": "FFTTLFYLFTYFFETESHSVTRLECSGVISAHATSASQVQAVLLPQPPK",
+            "len_alignment": "49",
+            "strand": "-",
+            "HERV_region_location": [
+                20960887,
+                20961033
+            ]
+        },
+        "location": [
+            20961007,
+            20961033
+        ]
+    },
+    "24": {
+        "input_ID": "3",
+        "ORF_ID": "572_chr2_73854772-73867144_3_ORF95",
+        "ORF": "GILLPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "572_chr2:73854772-73867144",
+            "ORF": "SWLTAASTSQVQGILLPQPPK",
+            "len_alignment": "21",
+            "strand": "+",
+            "HERV_region_location": [
+                73862631,
+                73862693
+            ]
+        },
+        "location": [
+            73862667,
+            73862693
+        ]
+    },
+    "25": {
+        "input_ID": "3",
+        "ORF_ID": "3525_chr11_67452583-67461867_3_ORF75",
+        "ORF": "GILLPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "3525_chr11:67452583-67461867",
+            "ORF": "DRVSLCCPGWSAGARSRLTATSTSWVQGILLPQPPK",
+            "len_alignment": "36",
+            "strand": "-",
+            "HERV_region_location": [
+                67455502,
+                67455395
+            ]
+        },
+        "location": [
+            67455421,
+            67455395
+        ]
+    },
+    "26": {
+        "input_ID": "3",
+        "ORF_ID": "4174_chr14_70275869-70286421_5_ORF86",
+        "ORF": "GILLPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "4174_chr14:70275869-70286421",
+            "ORF": "DRVSLCCQGWSVVVPSWLTVAPTSWVQGILLPQPPK",
+            "len_alignment": "36",
+            "strand": "+",
+            "HERV_region_location": [
+                70277792,
+                70277685
+            ]
+        },
+        "location": [
+            70277711,
+            70277685
+        ]
+    },
+    "27": {
+        "input_ID": "3",
+        "ORF_ID": "1047_chr3_102767103-102776388_2_ORF78",
+        "ORF": "GILLPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "1047_chr3:102767103-102776388",
+            "ORF": "AQGILLPQPPKVLGLQARVHLTSPPFPFFLFXXXXXXVLFFEMEFCSCCPDWSAMA",
+            "len_alignment": "56",
+            "strand": "-",
+            "HERV_region_location": [
+                102769544,
+                102769377
+            ]
+        },
+        "location": [
+            102769538,
+            102769512
+        ]
+    },
+    "28": {
+        "input_ID": "3",
+        "ORF_ID": "6073_chr1_155661620-155669313_3_ORF51",
+        "ORF": "GILLPQPPK",
+        "len_alignment": "9",
+        "HERV_ORF_dict": {
+            "HERV region": "6073_chr1:155661620-155669313",
+            "ORF": "FERIVSLFFSFFFFEREFCSCCTGWSAMAQSQLTATSAPQVQGILLPQPPK",
+            "len_alignment": "51",
+            "strand": "-",
+            "HERV_region_location": [
+                155663794,
+                155663642
+            ]
+        },
+        "location": [
+            155663668,
+            155663642
+        ]
+    }
+}

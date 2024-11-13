@@ -1,0 +1,7 @@
+sample name,type,result directory
+1,T,/home/ftw0710/github/HERVOminer/test/output/step3_2/1T_output.txt
+1,T,/home/ftw0710/github/HERVOminer/test/output/step3_2/1T_output.txt.summary
+7,T,/home/ftw0710/github/HERVOminer/test/output/step3_2/7T_output.txt
+7,T,/home/ftw0710/github/HERVOminer/test/output/step3_2/7T_output.txt.summary
+14,T,/home/ftw0710/github/HERVOminer/test/output/step3_2/14T_output.txt
+14,T,/home/ftw0710/github/HERVOminer/test/output/step3_2/14T_output.txt.summary
