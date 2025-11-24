@@ -26,35 +26,34 @@ def func3_quantification(inputCsvFile, annotationFile, outputPath, threadNo, par
 	normal = inputCsvResult[1]
 
 	# separate tasks into parallel list
-	tumour_tasks, tumourTasksError = separateTask(tumour, parallelTask)
-	normal_tasks, normalTasksError = separateTask(normal, parallelTask)
-	if (normalTasksError is not None):
-		raise ValueError(normalTasksError)
-		sys.exit(1)
-	if (tumourTasksError is not None):
-		raise ValueError(tumourTasksError)
-		sys.exit(1)
+	if len(tumour.keys()) != 0:
+		tumour_tasks, tumourTasksError = separateTask(tumour, parallelTask)
+		if (tumourTasksError is not None):
+			raise ValueError(tumourTasksError)
+			sys.exit(1)
+		# Run parallel task
+		paraTumourTaskError = processParallelTasks(tumour, tumour_tasks, "T", outputPath, threadNo, annotationFile)
+		if (paraTumourTaskError is not None):
+			raise ValueError(paraTumourTaskError)
+			sys.exit(1)
+		resultDirCSVerror_T = resultDirCSV(tumour, 'T', outputPath)
+		if (resultDirCSVerror_T is not None):
+			raise ValueError(resultDirCSVerror_T)
+			sys.exit(1)
 
-	# Run parallel task
-	paraTumourTaskError = processParallelTasks(tumour, tumour_tasks, "T", outputPath, threadNo, annotationFile)
-	if (paraTumourTaskError is not None):
-		raise ValueError(paraTumourTaskError)
-		sys.exit(1)
-	paraNormalTaskError = processParallelTasks(normal, normal_tasks, "N", outputPath, threadNo, annotationFile)
-	if (paraNormalTaskError is not None):
-		raise ValueError(paraNormalTaskError)
-		sys.exit(1)
-
-
-	resultDirCSVerror_T = resultDirCSV(tumour, 'T', outputPath)
-	if (resultDirCSVerror_T is not None):
-		raise ValueError(resultDirCSVerror_T)
-		sys.exit(1)
-	
-	resultDirCSVerror_N = resultDirCSV(normal, 'N', outputPath)
-	if (resultDirCSVerror_N is not None):
-		raise ValueError(resultDirCSVerror_N)
-		sys.exit(1)
+	if len(normal.keys()) != 0:
+		normal_tasks, normalTasksError = separateTask(normal, parallelTask)
+		if (normalTasksError is not None):
+			raise ValueError(normalTasksError)
+			sys.exit(1)
+		paraNormalTaskError = processParallelTasks(normal, normal_tasks, "N", outputPath, threadNo, annotationFile, multiMapped)
+		if (paraNormalTaskError is not None):
+			raise ValueError(paraNormalTaskError)
+			sys.exit(1)
+		resultDirCSVerror_N = resultDirCSV(normal, 'N', outputPath)
+		if (resultDirCSVerror_N is not None):
+			raise ValueError(resultDirCSVerror_N)
+			sys.exit(1)
 		
 	with open(f"{outputPath}/streamlit_quantification_process.txt", "w") as f:
 		f.write("1")
@@ -75,6 +74,7 @@ def inputFileHandle(inputCsvFile):
 
 		tumour = {}
 		normal = {}
+		samples = {}
 
 		for sample in bam_list:
 
@@ -91,8 +91,8 @@ def inputFileHandle(inputCsvFile):
 				normal[sample_id] = route
 
 		# check if normal and tumour sample are corresponding
-		if (list(normal.keys()) != list(tumour.keys())):
-			raise ValueError("tumour and normal sample are not corresponding")
+		# if (list(normal.keys()) != list(tumour.keys())):
+		# 	raise ValueError("tumour and normal sample are not corresponding")
 
 		return [tumour, normal], None
 
@@ -155,7 +155,7 @@ def separateTask(sampleDictionary, parallelTask):
 		print(f"Error: {err}", file=sys.stderr)
 		return None, err 
 
-def processParallelTasks(sampleDictionary, tasks, typeOfSample, outputPath, threadNo, annotationFile):
+def processParallelTasks(sampleDictionary, tasks, typeOfSample, outputPath, threadNo, annotationFile, multiMapped):
 	"""
 	Process parallel task using ProcessPoolExecutor
 	Input : 
