@@ -3,7 +3,7 @@ import pandas as pd
 import sys
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
-def func3_quantification(inputCsvFile, annotationFile, outputPath, threadNo, parallelTask):
+def func3_quantification(inputCsvFile, annotationFile, outputPath, threadNo, parallelTask, multiMapped):
 	"""
 	Use FeatureCounts to quantify each BLAST result remaining after filtering.
 	Input : 
@@ -14,10 +14,9 @@ def func3_quantification(inputCsvFile, annotationFile, outputPath, threadNo, par
 		parallelTask : integer for the parallel task
 	Output : resultDirectories_{T/N}.csv which record the path of the output of FeatureCounts
 	"""
-	## for streamlit
+	# to check the process for server
 	with open(f"{outputPath}/streamlit_quantification_process.txt", "w") as f:
 		f.write("0")
-		
 	# get bam file directories from csv input
 	inputCsvResult, inputCsvError = inputFileHandle(inputCsvFile)
 	if (inputCsvError is not None):
@@ -56,9 +55,10 @@ def func3_quantification(inputCsvFile, annotationFile, outputPath, threadNo, par
 	if (resultDirCSVerror_N is not None):
 		raise ValueError(resultDirCSVerror_N)
 		sys.exit(1)
-
+		
 	with open(f"{outputPath}/streamlit_quantification_process.txt", "w") as f:
 		f.write("1")
+
 	return None
 
 def inputFileHandle(inputCsvFile):
@@ -178,7 +178,7 @@ def processParallelTasks(sampleDictionary, tasks, typeOfSample, outputPath, thre
 					inputPaths.append(sampleDictionary[sample])
 					outputFiles.append(f"{outputPath}/{sample}{typeOfSample}_output.txt") 
 				# Submit task to the executor
-				futures.extend(executor.submit(featureCount, inputPath, outputFile, threadNo, annotationFile) for inputPath, outputFile in zip(inputPaths, outputFiles))
+				futures.extend(executor.submit(featureCount, inputPath, outputFile, threadNo, annotationFile, multiMapped) for inputPath, outputFile in zip(inputPaths, outputFiles))
 
 			# Handle the tasks
 			for future in as_completed(futures):
@@ -192,8 +192,12 @@ def processParallelTasks(sampleDictionary, tasks, typeOfSample, outputPath, thre
 	
 	return None
 
-def featureCount(inputPath, outputFile, threadNo, annotationFile):
-	featureCountsCommand = f"featureCounts -p --countReadPairs -F GTF -t HERV -T {threadNo} -a {annotationFile} -o {outputFile} {inputPath}"
+def featureCount(inputPath, outputFile, threadNo, annotationFile, multiMapped):
+	if multiMapped == 1:
+		featureCountsCommand = f"featureCounts -M --fraction -p --countReadPairs -F GTF -t HERV -T {threadNo} -a {annotationFile} -o {outputFile} {inputPath}"
+	else:
+		featureCountsCommand = f"featureCounts -p --countReadPairs -F GTF -t HERV -T {threadNo} -a {annotationFile} -o {outputFile} {inputPath}"
+
 	try:
 		subprocess.run(featureCountsCommand, shell = True, check = True)
 	except subprocess.CalledProcessError as err:

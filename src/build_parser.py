@@ -10,6 +10,7 @@ def build_parser():
 	blastORF_parser = subcmd.add_parser('blastORF', help = 'blastp the input file to the orf database')
 	blastORF_parser.add_argument("-p", "--peptide", required=True, help = "path to the input peptide file", dest = "inputPeptide")
 	blastORF_parser.add_argument("-o", "--output", default = os.getcwd(), help = "path to the output file", dest = "outputPath")
+	blastORF_parser.add_argument("-v", "--vcf", default = None, help = "path to the input vcf file", dest = "inputVCF")
 
 	# function 2 summarize and annotation (func2_summarize_annotation.py) :
 	summarize_annotation_parser = subcmd.add_parser('summarizeAnnotate', help = 'get the corresponding HERV region compare to the blastp output result get from function 1 and create annotation file in gtf format')
@@ -23,6 +24,7 @@ def build_parser():
 	quantification_parser.add_argument("-o", "--output", default=os.getcwd(), help = "path to the output file", dest = "outputPath")
 	quantification_parser.add_argument("-t", "--threads", required = True, help = "no of threads to use for one sample", dest = "threadNo" )
 	quantification_parser.add_argument("-n", "--parallel_task", required = True, help = "number of sample to be analyzed in parallel computing", dest = "parallelTask")
+	quantification_parser.add_argument("-M", "--multimapped", default=0, help = "account for multi-mapped reads during quantification or not, 1 : account for multi-mapped reads, 0 : ignore multi-mapped reads, default : 0", dest = "multiMapped")
 
 	# function 4 outputResult (func4_outputResult.py) :
 	outputResult_parser = subcmd.add_parser('outputResult', help = 'output the analyzed result in csv format')
@@ -30,9 +32,9 @@ def build_parser():
 	outputResult_parser.add_argument("-i", "--input_csv_file", required=True, help = "path to the input csv file with all of the bam file path", dest = "inputCsvFile")
 	outputResult_parser.add_argument("-T", "--tumour_quantification_result", required=True, help = "path to the resultDirectories_T.csv file", dest = "tumourResultDirectories")
 	outputResult_parser.add_argument("-N", "--normal_quantification_result", required=True, help = "path to the resultDirectories_N.csv file", dest = "normalResultDirectories")
-	outputResult_parser.add_argument("-z", "--with_zero", default = 0, help = "include region with zero count or not, 1 : with zero, 0: without zero", dest = "withZero")
+	outputResult_parser.add_argument("-z", "--with_zero", default = 0, help = "include region with zero count or not, 1 : with zero, 0: without zero, default : 0", dest = "withZero")
 	outputResult_parser.add_argument("-o", "--output", default = os.getcwd(), help = "path to the output file", dest = "outputPath")
-	outputResult_parser.add_argument("-d", "--dpi", default = 100, help = "set the dpi of the figures", dest = "dpi")
+	outputResult_parser.add_argument("-d", "--dpi", default = 100, help = "set the dpi of the figures, default : 100", dest = "dpi")
 	outputResult_parser.add_argument("-sp", "--selected_peptide", default = None, help = "optional value, to output the specific plots of the selected peptide, please input the peptide id shown on the table 'Maximal HERV Region Counts per Query Peptide Across All Sample' ", dest = "selectedPeptide")
 	outputResult_parser.add_argument("-sr", "--selected_region", default = None, help = "optional value, to output plots with the selected regions only", dest = "selectedRegion")
 
@@ -40,12 +42,14 @@ def build_parser():
 	# HERVtool(args.inputPeptide, args.inputCsvFile, args.outputPath, args.thread, args.group)
 	HERVOminer_parser = subcmd.add_parser('HERVOminer', help = 'finish the whole process')
 	HERVOminer_parser.add_argument("-p", "--peptide", required=True, help = "path to the input peptide file", dest = "inputPeptide")
+	HERVOminer_parser.add_argument("-v", "--vcf", default = None, help = "path to the input vcf file", dest = "inputVCF")
 	HERVOminer_parser.add_argument("-i", "--input_csv_file", required=True, help = "path to the input csv file with all of the bam file path", dest = "inputCsvFile")
 	HERVOminer_parser.add_argument("-o", "--output", default = os.getcwd(), help = "path to the output file", dest = "outputPath")
 	HERVOminer_parser.add_argument("-t", "--threads", required = True, help = "no of threads to use for one sample", dest = "threadNo" )
 	HERVOminer_parser.add_argument("-n", "--parallel_task", required = True, help = "number of sample to be analyzed in parallel computing", dest = "parallelTask")
-	HERVOminer_parser.add_argument("-z", "--with_zero", default = 0, help = "include region with zero count or not, 1 : with zero, 0: without zero", dest = "withZero")
-	HERVOminer_parser.add_argument("-d", "--dpi", default = 100, help = "set the dpi of the figures", dest = "dpi")
+	HERVOminer_parser.add_argument("-z", "--with_zero", default = 0, help = "include region with zero count or not, 1 : with zero, 0: without zero, default : 0", dest = "withZero")
+	HERVOminer_parser.add_argument("-d", "--dpi", default = 100, help = "set the dpi of the figures, default : 100", dest = "dpi")
+	HERVOminer_parser.add_argument("-M", "--multimapped", default=0, help = "account for multi-mapped reads during quantification or not, 1 : account for multi-mapped reads, 0 : ignore multi-mapped reads, default : 0", dest = "multiMapped")
 
 
 	return parser 
