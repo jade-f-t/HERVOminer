@@ -34,7 +34,7 @@ if __name__ == "__main__":
 		func1_blastORF(args.inputPeptide, args.outputPath, args.inputVCF)
 		func2_summarize_annotation(blastpOutput, args.outputPath)
 		func3_quantification(args.inputCsvFile, annotationFile, args.outputPath,args.threadNo, args.parallelTask, args.multiMapped)
-		func4_outputResult(args.inputPeptide, args.inputCsvFile, tumourResultDirectories, normalResultDirectories, args.outputPath, args.withZero, args.dpi, None, None)
+		func4_outputResult(args.inputPeptide, args.inputCsvFile, tumourResultDirectories, normalResultDirectories, args.outputPath, args.withZero, args.dpi, args.selectedPeptide, args.selectedRegion)
 
 		returnValue = None
 
