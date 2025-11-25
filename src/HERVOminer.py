@@ -18,7 +18,7 @@ if __name__ == "__main__":
 		returnValue = func1_blastORF(args.inputPeptide, args.outputPath, args.inputVCF)
 
 	elif args.subcmd == 'summarizeAnnotate':
-		returnValue = func2_summarize_annotation(args.blastpOutput, args.outputPath)
+		returnValue = func2_summarize_annotation(args.blastpOutput, args.outputPath, args.refGenome)
 
 	elif args.subcmd == 'quantification':
 		returnValue = func3_quantification(args.inputCsvFile, args.annotationFile, args.outputPath,args.threadNo, args.parallelTask, args.multiMapped)
@@ -32,7 +32,7 @@ if __name__ == "__main__":
 		tumourResultDirectories = f"{args.outputPath}/resultDirectories_T.csv"
 		normalResultDirectories = f"{args.outputPath}/resultDirectories_N.csv"
 		func1_blastORF(args.inputPeptide, args.outputPath, args.inputVCF)
-		func2_summarize_annotation(blastpOutput, args.outputPath)
+		func2_summarize_annotation(blastpOutput, args.outputPath, args.refGenome)
 		func3_quantification(args.inputCsvFile, annotationFile, args.outputPath,args.threadNo, args.parallelTask, args.multiMapped)
 		func4_outputResult(args.inputPeptide, args.inputCsvFile, tumourResultDirectories, normalResultDirectories, args.outputPath, args.withZero, args.dpi, args.selectedPeptide, args.selectedRegion)
 

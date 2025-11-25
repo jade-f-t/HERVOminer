@@ -1,7 +1,8 @@
 .DS_Store
-
+src/__pycache__
 data/HERV_ORF_dict
-# data/HervOrfBlastpDB.tar.gz
-# data/hg19/
-# data/hg19.tar.gz
-data/
+data/HervOrfBlastpDB.tar.gz
+data/hg19/
+data/hg19.tar.gz
+# data/
+data/HervOrfBlastpDB

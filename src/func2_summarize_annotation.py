@@ -2,7 +2,7 @@ import json
 import os 
 import sys
 
-def func2_summarize_annotation(blastpOutput, outputPath):
+def func2_summarize_annotation(blastpOutput, outputPath, refGenome):
     """
     Filter BLAST results of protein BLAST , and summarize their information.
     Then, generate the corresponding annotation file for the following quantification process.
@@ -24,7 +24,7 @@ def func2_summarize_annotation(blastpOutput, outputPath):
 
     HERVregion = f"{outputPath}/output_dict.json"
 
-    getHERVregionError = getHERVregion(blastpOutput, outputPath)
+    getHERVregionError = getHERVregion(blastpOutput, outputPath, refGenome)
     if (getHERVregionError is not None):
         raise ValueError(getHERVregionError)
         sys.exit(1)
@@ -36,7 +36,7 @@ def func2_summarize_annotation(blastpOutput, outputPath):
 
     return None
 
-def getHERVregion(blastpOutput, outputPath):
+def getHERVregion(blastpOutput, outputPath, refGenome):
     """
     Input : 
         blastpOutput : blastp_output.txt
@@ -45,9 +45,16 @@ def getHERVregion(blastpOutput, outputPath):
     Return : None if no error
     """
     output_dict = {}
+    if refGenome == 'hg19':
+        HERV_ORF_dict_version = './data/HERV_ORF_dict'
+    elif refGenome == 'hg38':
+        HERV_ORF_dict_version = './data/HERV_ORF_dict_hg38'
+    elif refGenome == 't2t':
+        HERV_ORF_dict_version = './data/HERV_ORF_dict_hs1'
+
 
     try:
-        with open('./data/HERV_ORF_dict', 'r') as file:
+        with open(HERV_ORF_dict_version, 'r') as file:
             HERV_ORF_dict = json.load(file)
     except Exception as err:
         print(f"Error: please check the HERV_ORF_dict data: {err}", file=sys.stderr)

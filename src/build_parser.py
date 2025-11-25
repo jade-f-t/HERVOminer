@@ -16,6 +16,7 @@ def build_parser():
 	summarize_annotation_parser = subcmd.add_parser('summarizeAnnotate', help = 'get the corresponding HERV region compare to the blastp output result get from function 1 and create annotation file in gtf format')
 	summarize_annotation_parser.add_argument("-i", "--input_blastpOutput", required=True, help = "path to the input blastp output file get from function 1", dest = "blastpOutput")
 	summarize_annotation_parser.add_argument("-o", "--output", default = os.getcwd(), help = "path to the output file", dest = "outputPath")
+	summarize_annotation_parser.add_argument("-g", "--referenceGenome", default = "hg19", help = "reference genome versions, please indicate 'hg19', 'hg38', or 't2t', default : 'hg19'", dest = "refGenome")
 
 	# function 3 quantification (func3_quantification.py) :
 	quantification_parser = subcmd.add_parser('quantification', help = 'use featureCount count to quantify the HERV region')
@@ -50,6 +51,7 @@ def build_parser():
 	HERVOminer_parser.add_argument("-z", "--with_zero", default = 0, help = "include region with zero count or not, 1 : with zero, 0: without zero, default : 0", dest = "withZero")
 	HERVOminer_parser.add_argument("-d", "--dpi", default = 100, help = "set the dpi of the figures, default : 100", dest = "dpi")
 	HERVOminer_parser.add_argument("-M", "--multimapped", default=0, help = "account for multi-mapped reads during quantification or not, 1 : account for multi-mapped reads, 0 : ignore multi-mapped reads, default : 0", dest = "multiMapped")
+	HERVOminer_parser.add_argument("-g", "--referenceGenome", default = "hg19", help = "reference genome versions, please indicate 'hg19', 'hg38', or 't2t', default : 'hg19'", dest = "refGenome")
 
 
 	return parser 
