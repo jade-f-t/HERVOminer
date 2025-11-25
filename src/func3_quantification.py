@@ -32,7 +32,7 @@ def func3_quantification(inputCsvFile, annotationFile, outputPath, threadNo, par
 			raise ValueError(tumourTasksError)
 			sys.exit(1)
 		# Run parallel task
-		paraTumourTaskError = processParallelTasks(tumour, tumour_tasks, "T", outputPath, threadNo, annotationFile)
+		paraTumourTaskError = processParallelTasks(tumour, tumour_tasks, "T", outputPath, threadNo, annotationFile, multiMapped)
 		if (paraTumourTaskError is not None):
 			raise ValueError(paraTumourTaskError)
 			sys.exit(1)
