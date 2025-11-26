@@ -193,7 +193,7 @@ def processParallelTasks(sampleDictionary, tasks, typeOfSample, outputPath, thre
 	return None
 
 def featureCount(inputPath, outputFile, threadNo, annotationFile, multiMapped):
-	if multiMapped == 1:
+	if multiMapped == "1":
 		featureCountsCommand = f"featureCounts -M --fraction -p --countReadPairs -F GTF -t HERV -T {threadNo} -a {annotationFile} -o {outputFile} {inputPath}"
 	else:
 		featureCountsCommand = f"featureCounts -p --countReadPairs -F GTF -t HERV -T {threadNo} -a {annotationFile} -o {outputFile} {inputPath}"
