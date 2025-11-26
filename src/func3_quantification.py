@@ -169,11 +169,11 @@ def processParallelTasks(sampleDictionary, tasks, typeOfSample, outputPath, thre
 		results of featureCount
 	"""
 	try:
-		with ProcessPoolExecutor() as executor:
+		with ProcessPoolExecutor(max_workers=len(tasks)) as executor:
 			futures = []
-			inputPaths = []
-			outputFiles = []
 			for task in tasks:
+				inputPaths = []
+				outputFiles = []
 				for sample in task:
 					inputPaths.append(sampleDictionary[sample])
 					outputFiles.append(f"{outputPath}/{sample}{typeOfSample}_output.txt") 
