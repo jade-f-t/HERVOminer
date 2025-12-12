@@ -5,6 +5,7 @@ import sys
 
 from build_parser import build_parser
 
+from func0_combineGTF import func0_combineGTF
 from func1_blastORF import func1_blastORF
 from func2_summarize_annotation import func2_summarize_annotation
 from func3_quantification import func3_quantification
@@ -37,6 +38,10 @@ if __name__ == "__main__":
 		func4_outputResult(args.inputPeptide, args.inputCsvFile, tumourResultDirectories, normalResultDirectories, args.outputPath, args.withZero, args.dpi, args.selectedPeptide, args.selectedRegion)
 
 		returnValue = None
+
+	elif args.subcmd == 'combineGTF':
+		returnValue = func0_combineGTF(args.gtfPath, args.outputPath)
+
 
 	sys.exit(returnValue)
 

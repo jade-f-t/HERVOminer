@@ -6,6 +6,11 @@ def build_parser():
 	subcmd = parser.add_subparsers(dest='subcmd', help='subcommands', metavar='SUBCOMMAND')
 	subcmd.required = True
 
+	# function 0 combineGTF (func0_combineGTF.py) : 
+	combineGTF_parser = subcmd.add_parser('combineGTF', help = 'combine multiple GTF')
+	combineGTF_parser.add_argument("-a", "--annotation_path", required=True, help = "path to the csv file containing the path to the gtf files", dest = "gtfPath")
+	combineGTF_parser.add_argument("-o", "--output", default = os.getcwd(), help = "path to the output file", dest = "outputPath")
+
 	# function 1 blastORF (func1_blastORF.py) : 
 	blastORF_parser = subcmd.add_parser('blastORF', help = 'blastp the input file to the orf database')
 	blastORF_parser.add_argument("-p", "--peptide", required=True, help = "path to the input peptide file", dest = "inputPeptide")
