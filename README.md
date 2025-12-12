@@ -98,9 +98,29 @@ Each tumor sample need to have its matched normal sample. The sample id fields o
 | ...     | ...     | ...     |
 
 
-2. query peptide 
+2. Query peptide 
 - Description : \
 The absolute directory of the query peptides FASTA file.
+
+3. (optional) Patient variant calling format file (vcf)
+- Description : \
+The vcf file for each sample, which HERVOminer uses to adjust the HERV ORF database based on the SNVs that overlap with the HERV ORFs regions.
+
+4. (optional) Paths of the annotation files
+- Description : \
+If individual accumulated mutations are considered, and vcf files of each patients are included in the mapping step, multiple annotation files will be produced. To combine the annotation files, a CSV file containing all directories of annotation files is required.
+- Format : \
+1 fields : directory to the annotation files
+- Example input format : 
+
+
+| <!-- -->    |
+|-------------|
+| /Users/jade-f-t/data/10T.vcf   | 
+| /Users/jade-f-t/data/10N.vcf   | 
+| /Users/jade-f-t/data/21T.vcf   |
+| /Users/jade-f-t/data/21N.vcf   |
+| ...     |
 
 ### Separated Subcommands
 
@@ -111,7 +131,8 @@ The absolute directory of the query peptides FASTA file.
 	```bash 
 	./src/HERVOminer.py blastORF \
 	-p <path to the input peptide file> \
-	-o <path to the output file>
+	-o <path to the output file> \
+	-v <path to the input vcf file, optional argument>
 	``` 
 	- **Output:** blastp_output.txt 
 
@@ -124,8 +145,21 @@ The absolute directory of the query peptides FASTA file.
 	./src/HERVOminer.py summarizeAnnotate \
 	-i <path to the input blastp output file get from Step 1> \
 	-o <path to the output file>
+	-g <reference genome versions, optional arguments, please indicate 'hg19', 'hg38', or 't2t', default : 'hg19'>
 	``` 
 	- **Output:** output_dict.json, quantification.gtf 
+
+	STEP 2.5 : (optional) combine multiple annotation files
+	- **Description:**
+	If individual accumulated mutations were considered, and vcf files of the samples are uploaded in STEP 1, multiple annotation files (gtf files) would be produced. To continue the following quantification and visulaization steps, annotation files could be combined by this step.
+	- **Usage:** 
+	```bash
+	./src/HERVOminer.py combineGTF \
+	-a <path to the csv file containing the path to the gtf files> \
+	-o <path to the output file>
+	``` 
+	- **Output:** combined_quantification.gtf 
+
 
 3. STEP 3 : Quantification of candidate HERV fragments (featureCounts)
 	- **Description :** \
@@ -138,6 +172,7 @@ The absolute directory of the query peptides FASTA file.
 	-o <path to the output file> \
 	-t <no of threads to use for one sample> \
 	-n <number of sample to be analyzed in parallel computing>
+	-M <account for multi-mapped reads during quantification or not, optional argument, 1 : account for multi-mapped reads, 0 : ignore multi-mapped reads, default : 0>
 	```
 	- **Output :** output files of featureCounts, csv files for tumor and normal featureCounts   
 	output directories (resultDirectories_T.csv and resultDirectories_N.csv)
@@ -175,6 +210,8 @@ This command can finish all of the above steps all at once. The outputs are same
 -d <set the dpi of the figures>
 -sr <selected regions to appear in the plots in the form <region_id>,<region_id>,... eg. 2_1_3166,10_1_3514,15_1_2630, optional argument, defualt value : None>
 -sp <selected peptide to generate respective plots, please input the id of the peptide (shown on the table 'Maximal HERV Region Counts per Query Peptide Across All Sample'), optional argument, defualt value : None>
+-g <reference genome versions, optional arguments, please indicate 'hg19', 'hg38', or 't2t', default : 'hg19'>
+-M <account for multi-mapped reads during quantification or not, optional argument, 1 : account for multi-mapped reads, 0 : ignore multi-mapped reads, default : 0>
 ```
 
 ## Example final outputs
